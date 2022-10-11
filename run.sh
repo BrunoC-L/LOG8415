@@ -14,7 +14,7 @@ def my_app():
     return 'First Flask Application!'
 \" > app.py
 
-python -m flask --app app run --port 8080
+app.py flask run --port 8080
 " > deployflask.sh
 
 
