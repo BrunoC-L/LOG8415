@@ -1,8 +1,8 @@
+# open this as raw copy url and run `curl <url> > run.sh && sh run.sh`
 python3 -m pip install --upgrade pip
 pip3 install boto3
 
 printf "python3 -m pip install --upgrade pip \npip install flask \nprintf \"from flask import Flask\\napp = Flask(__name__)\\n@app.route('/')\\ndef my_app():\\n  return 'app'\" > app.py\napp.py flask run --port 8080\n" > deployflask.sh
-cat deployflask.sh
 
 ECSImageId=$(aws ec2 describe-images --owners amazon --filters "Name=name,Values=amzn2-ami-ecs*" --query 'sort_by(Images, &CreationDate)[].Name' --query 'sort_by(Images, &CreationDate)[-1].ImageId' --output text)
 
