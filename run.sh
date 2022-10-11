@@ -7,3 +7,6 @@ pip3 install boto3
 
 ECSImageId=$(aws ec2 describe-images --owners amazon --filters "Name=name,Values=amzn2-ami-ecs*" --query 'sort_by(Images, &CreationDate)[].Name' --query 'sort_by(Images, &CreationDate)[-1].ImageId' --output text)
 aws ec2 run-instances --image-id $ECSImageId --instance-type t2.micro --key-name vockey
+
+# terminate all instances
+# aws ec2 terminate-instances --instance-ids $(aws ec2 describe-instances --query "Reservations[].Instances[].[InstanceId]" --output text)
