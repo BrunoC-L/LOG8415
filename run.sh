@@ -6,7 +6,7 @@ cat deployflask.sh
 
 ECSImageId=$(aws ec2 describe-images --owners amazon --filters "Name=name,Values=amzn2-ami-ecs*" --query 'sort_by(Images, &CreationDate)[].Name' --query 'sort_by(Images, &CreationDate)[-1].ImageId' --output text)
 
-aws ec2 run-instances --image-id $ECSImageId --count 1 --instance-type t2.micro --key-name vockey --user-data file://deployflask.sh --query "Instances[].[InstanceId]"
+aws ec2 run-instances --image-id $ECSImageId --count 1 --instance-type t2.micro --key-name vockey --user-data file://deployflask.sh --query "Instances[].[InstanceId]" --output text
 
 # terminate all instances
 # aws ec2 terminate-instances --instance-ids $(aws ec2 describe-instances --query "Reservations[].Instances[].[InstanceId]" --output text)
