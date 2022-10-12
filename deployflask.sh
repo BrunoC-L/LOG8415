@@ -18,4 +18,4 @@ def my_app():
 
 cat my_app.py
 export flask_application=my_app.py
-flask run
+flask run --host=0.0.0.0 --port=80
