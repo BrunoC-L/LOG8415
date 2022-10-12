@@ -5,6 +5,8 @@ apt-get install -y python3-pip
 apt-get install -y nginx
 apt-get install -y gunicorn3 
 
+IpAddress=$(curl http://169.254.169.254/latest/meta-data/public-ipv4)
+
 mkdir flask_application && cd flask_application
 pip install Flask
 echo "from flask import Flask
@@ -19,7 +21,7 @@ cd etc/nginx/
 cd sites-enabled/
 echo "server {
     listen 80;
-    server_name instance_public_ip;
+    server_name $IpAddress;
 
     location / {
         proxy_pass http://127.0.0.1:8000;
