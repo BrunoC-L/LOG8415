@@ -2,16 +2,19 @@
 python3 -m pip install --upgrade pip
 pip3 install boto3
 
-printf "python3 -m pip install --upgrade pip \npip install flask \nprintf \"from flask import Flask\\napp = Flask(__name__)\\n@app.route('/')\\ndef my_app():\\n  return 'app'\" > app.py\napp.py flask run --port 8080\n" > deployflask.sh
+# printf "python3 -m pip install --upgrade pip \npip install flask \nprintf \"from flask import Flask\\napp = Flask(__name__)\\n@app.route('/')\\ndef my_app():\\n  return 'app'\" > app.py\napp.py flask run --port 8080\n" > deployflask.sh
 
-ECSImageId=$(aws ec2 describe-images --owners amazon --filters "Name=name,Values=amzn2-ami-ecs*" --query 'sort_by(Images, &CreationDate)[].Name' --query 'sort_by(Images, &CreationDate)[-1].ImageId' --output text)
+printf '#!%s'"/bin/bash \napt-get update \napt-get install -y python3 \napt-get install -y python3-pip \napt-get install -y nginx \napt-get install -y gunicorn3 \nIpAddress=$(curl http://169.254.169.254/latest/meta-data/public-ipv4) \nmkdir flask_application && cd flask_application \npip install Flask \necho \"from flask import Flask \napp = Flask(__name__) \n@app.route('/') \ndef my_app(): \n\treturn 'First Flask Application' \nif __name__=='__main__': \n\tapp.run(host='0.0.0.0', port=8080)\" > my_app.py \ncd etc/nginx/ \ncd sites-enabled/ \necho \"server { \nlisten 80; \n\tserver_name $IpAddress; \n\nlocation / { \n\tproxy_pass http://127.0.0.1:8000; \n\t} \n}\" > flaskapp \nservice nginx restart \ncd ~ \ncd flask_application \ngunicorn3 my_app:my_app" > deployFlask.sh
 
+# ECSImageId=$(aws ec2 describe-images --owners amazon --filters "Name=name,Values=amzn2-ami-ecs*" --query 'sort_by(Images, &CreationDate)[].Name' --query 'sort_by(Images, &CreationDate)[-1].ImageId' --output text)
+
+ECSImageId=ami-09a41e26df464c548
 SecurityGroup=$(aws ec2 create-security-group --description "Flask Group" --group-name flask-group --output text)
 aws ec2 authorize-security-group-ingress --group-id $SecurityGroup --protocol tcp --port 22 --cidr 0.0.0.0/0
 aws ec2 authorize-security-group-ingress --group-id $SecurityGroup --protocol tcp --port 80 --cidr 0.0.0.0/0
 aws ec2 authorize-security-group-ingress --group-id $SecurityGroup --protocol tcp --port 8080 --cidr 0.0.0.0/0
 
-aws ec2 run-instances --image-id $ECSImageId --count 1 --instance-type t2.micro --security-group-ids $SecurityGroup --key-name vockey --user-data file://deployflask.sh --query "Instances[].[InstanceId]" --output text
+aws ec2 run-instances --image-id $ECSImageId --count 1 --instance-type t2.micro --security-group-ids $SecurityGroup --key-name vockey --user-data file://deployFlask.sh --query "Instances[].[InstanceId]" --output text
 
 # terminate all instances
 # aws ec2 terminate-instances --instance-ids $(aws ec2 describe-instances --query "Reservations[].Instances[].[InstanceId]" --output text)
