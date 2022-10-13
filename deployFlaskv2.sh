@@ -2,14 +2,18 @@
 apt-get update
 apt-get install -y python3
 apt-get install -y python3-pip
-apt-get install -y gunicorn3 
 apt-get install -y python3-venv
+apt-get install -y python-dev
+apt-get install -y virtualenv
+
+apt-get install -y nginx
 
 mkdir flask_application
 cd flask_application
-python3 -m venv venv
+virtualenv venv
 source venv/bin/activate
 pip install flask
+pip install gunicorn
 echo "from flask import Flask
 app = Flask(__name__)
 @app.route('/')
@@ -33,3 +37,25 @@ WantedBy=multi-user.target"> /etc/systemd/system/flaskapp.service
 systemctl daemon-reload
 systemctl start flaskapp
 systemctl enable flaskapp
+
+systemctl start nginx
+systemctl enable nginx
+
+echo "upstream flaskflaskapp {
+    server 127.0.0.1:8080;
+}
+
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+
+    root /var/www/html;
+
+    server_name _;
+
+    location / {
+        proxy_pass http://flaskflaskapp;
+    }
+}" > /etc/nginx/sites-available/default
+
+systemctl restart nginx

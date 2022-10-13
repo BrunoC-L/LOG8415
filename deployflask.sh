@@ -3,7 +3,6 @@ apt-get update
 apt-get install -y python3
 apt-get install -y python3-pip
 apt-get install -y nginx
-apt-get install -y gunicorn3 
 
 IpAddress=$(curl http://169.254.169.254/latest/meta-data/public-ipv4)
 
@@ -12,6 +11,7 @@ cd flask_application
 python3 -m venv venv
 source venv/bin/activate
 pip install Flask
+pip install gunicorn
 echo "from flask import Flask
 app = Flask(__name__)
 @app.route('/')
@@ -34,4 +34,4 @@ echo ";
 service nginx restart
 cd ~
 cd /flask_application
-gunicorn3 -b 0.0.0.0:8000 my_app:app
+gunicorn -b 0.0.0.0:8000 my_app:app
