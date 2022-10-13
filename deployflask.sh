@@ -9,6 +9,8 @@ IpAddress=$(curl http://169.254.169.254/latest/meta-data/public-ipv4)
 
 mkdir flask_application
 cd flask_application
+python3 -m venv venv
+source venv/bin/activate
 pip install Flask
 echo "from flask import Flask
 app = Flask(__name__)
@@ -16,7 +18,7 @@ app = Flask(__name__)
 def my_app():
     return 'First Flask Application'
 if __name__=='__main__':
-    app.run(host='0.0.0.0', port=8080)" > my_app.py
+    app.run()" > my_app.py
 
 cd /etc/nginx/
 cd sites-enabled/
@@ -32,4 +34,4 @@ echo ";
 service nginx restart
 cd ~
 cd /flask_application
-gunicorn3 my_app:my_app
+gunicorn3 -b 0.0.0.0:8000 my_app:app
