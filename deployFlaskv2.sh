@@ -14,11 +14,14 @@ virtualenv venv
 source venv/bin/activate
 pip install flask
 pip install gunicorn
+pip install subprocess
 echo "from flask import Flask
+import subprocess
 app = Flask(__name__)
+instance_id = subprocess.check_output(['curl', 'http://169.254.169.254/latest/meta-data/instance-id'])
 @app.route('/')
 def my_app():
-    return 'First Flask Application'
+    return 'Instance '+ instance_id + ' is responding now'
 if __name__=='__main__':
     app.run()" > my_app.py
 

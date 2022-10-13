@@ -5,6 +5,7 @@ apt-get install -y python3-pip
 apt-get install -y nginx
 
 IpAddress=$(curl http://169.254.169.254/latest/meta-data/public-ipv4)
+InstanceId=$(curl http://169.254.169.254/latest/meta-data/instance-id)
 
 mkdir flask_application
 cd flask_application
