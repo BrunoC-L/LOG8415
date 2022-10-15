@@ -96,10 +96,12 @@ aws ec2 authorize-security-group-ingress --group-id $SecurityGroup --protocol tc
 
 aws ec2 run-instances --image-id $ECSImageId --count 1 --instance-type t2.micro --security-group-ids $SecurityGroup --key-name vockey --user-data file://deployFlask.sh --query "Instances[].[InstanceId]" --output text
 
+#get vpc id 
+VpcId=$(aws ec2 describe-vpcs --query 'Vpcs'[0].VpcId --output text)
 
 ## create target group
-aws elbv2 create-target-group --name cluster1 --protocol HTTP --port 80 --target-type instance --vpc-id vpc-0d6def933ebef8c51
-aws elbv2 create-target-group --name cluster2 --protocol HTTP --port 80 --target-type instance --vpc-id vpc-0d6def933ebef8c51
+aws elbv2 create-target-group --name cluster1 --protocol HTTP --port 80 --target-type instance --vpc-id $VpcId
+aws elbv2 create-target-group --name cluster2 --protocol HTTP --port 80 --target-type instance --vpc-id $VpcId
 
 #stocker les TargetGroupArn
 TargetGroupArn1=$(aws elbv2 describe-target-groups --query 'TargetGroups'[0].TargetGroupArn --output text)
