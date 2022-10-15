@@ -76,7 +76,12 @@ ECSImageId=ami-09a41e26df464c548
 DefaultSecurityGroup=$(aws ec2 describe-security-groups --query "SecurityGroups[].GroupId" --filters Name=group-name,Values=default --output text)
 OldGroups=$(aws ec2 describe-security-groups --query "SecurityGroups[].GroupId" --output text)
 # terminate all instances in case of dependency to sg (which means we cant delete sg)
-aws ec2 terminate-instances --instance-ids $(aws ec2 describe-instances --query "Reservations[].Instances[].[InstanceId]" --output text)
+OldInstances=$(aws ec2 describe-instances --query "Reservations[].Instances[].[InstanceId]" --output text)
+for instance in $OldInstances
+do
+aws ec2 modify-instance-attribute --instance-id $instance --groups $DefaultSecurityGroup
+done
+aws ec2 terminate-instances --instance-ids $OldInstances
 for group in $OldGroups
 do
 if [ "$group" != "$DefaultSecurityGroup" ]; then
