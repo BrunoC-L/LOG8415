@@ -75,6 +75,8 @@ ECSImageId=ami-09a41e26df464c548
 
 DefaultSecurityGroup=$(aws ec2 describe-security-groups --query "SecurityGroups[].GroupId" --filters Name=group-name,Values=default --output text)
 OldGroups=$(aws ec2 describe-security-groups --query "SecurityGroups[].GroupId" --output text)
+# terminate all instances in case of dependency to sg (which means we cant delete sg)
+aws ec2 terminate-instances --instance-ids $(aws ec2 describe-instances --query "Reservations[].Instances[].[InstanceId]" --output text)
 for group in $OldGroups
 do
 if [ "$group" != "$DefaultSecurityGroup" ]; then
@@ -133,4 +135,4 @@ aws elbv2 delete-target-group --target-group-arn $TargetGroupArn1
 aws elbv2 delete-target-group --target-group-arn $TargetGroupArn2
 
 # terminate all instances
-# aws ec2 terminate-instances --instance-ids $(aws ec2 describe-instances --query "Reservations[].Instances[].[InstanceId]" --output text)
+aws ec2 terminate-instances --instance-ids $(aws ec2 describe-instances --query "Reservations[].Instances[].[InstanceId]" --output text)
