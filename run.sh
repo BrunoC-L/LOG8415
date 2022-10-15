@@ -73,7 +73,7 @@ systemctl restart nginx" > deployFlask.sh
 # ECSImageId=$(aws ec2 describe-images --owners amazon --filters "Name=name,Values=amzn2-ami-ecs*" --query 'sort_by(Images, &CreationDate)[].Name' --query 'sort_by(Images, &CreationDate)[-1].ImageId' --output text)
 ECSImageId=ami-09a41e26df464c548
 
-DefaultSecurityGroup = $(aws ec2 describe-security-groups --query "SecurityGroups[].GroupId" --filters Name=group-name,Values=default --output text)
+DefaultSecurityGroup=$(aws ec2 describe-security-groups --query "SecurityGroups[].GroupId" --filters Name=group-name,Values=default --output text)
 OldGroups=$(aws ec2 describe-security-groups --query "SecurityGroups[].GroupId" --output text)
 for group in $OldGroups
 do
