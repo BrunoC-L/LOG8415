@@ -71,10 +71,9 @@ server {
 systemctl restart nginx" > deployFlask.sh
 
 # ECSImageId=$(aws ec2 describe-images --owners amazon --filters "Name=name,Values=amzn2-ami-ecs*" --query 'sort_by(Images, &CreationDate)[].Name' --query 'sort_by(Images, &CreationDate)[-1].ImageId' --output text)
-
 ECSImageId=ami-09a41e26df464c548
-#SecurityGroup=$(aws ec2 create-security-group --description "Flask Group" --group-name flask-group --output text)
-SecurityGroup=sg-0666cf92245a33566
+
+SecurityGroup=$(aws ec2 create-security-group --description "Flask Group" --group-name flask-group --output text)
 aws ec2 authorize-security-group-ingress --group-id $SecurityGroup --protocol tcp --port 22   --cidr 0.0.0.0/0
 aws ec2 authorize-security-group-ingress --group-id $SecurityGroup --protocol tcp --port 80   --cidr 0.0.0.0/0
 aws ec2 authorize-security-group-ingress --group-id $SecurityGroup --protocol tcp --port 8080 --cidr 0.0.0.0/0
