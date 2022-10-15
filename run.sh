@@ -86,5 +86,48 @@ aws ec2 authorize-security-group-ingress --group-id $SecurityGroup --protocol tc
 
 aws ec2 run-instances --image-id $ECSImageId --count 1 --instance-type t2.micro --security-group-ids $SecurityGroup --key-name vockey --user-data file://deployFlask.sh --query "Instances[].[InstanceId]" --output text
 
+
+## create target group
+aws elbv2 create-target-group --name cluster1 --protocol HTTP --port 80 --target-type instance --vpc-id vpc-0d6def933ebef8c51
+aws elbv2 create-target-group --name cluster2 --protocol HTTP --port 80 --target-type instance --vpc-id vpc-0d6def933ebef8c51
+
+#stocker les TargetGroupArn
+TargetGroupArn1=$(aws elbv2 describe-target-groups --query 'TargetGroups'[0].TargetGroupArn --output text)
+TargetGroupArn2=$(aws elbv2 describe-target-groups --query 'TargetGroups'[1].TargetGroupArn --output text)
+
+## add instances to target-group
+#TO DO : obtenir les instance id 
+
+#cluster 1
+#aws elbv2 register-targets --target-group-arn TargetGroupArn1  -targets Id=#TO DO instance ID i-0abcdef1234567890 Id=i-1234567890abcdef0
+#cluster 2
+#aws elbv2 register-targets --target-group-arn TargetGroupArn2  -targets Id=TO DO i-0abcdef1234567890 Id=i-1234567890abcdef0
+
+
+## create loadbalancer 
+aws elbv2 create-load-balancer --name my-load-balancer  --subnets subnet-04f197a80f791c8ed  subnet-0e39e8d6bc1a91173 
+
+#stocker LoadBalancerArn
+LoadBalancerArn=$(aws elbv2 describe-load-balancers --query 'LoadBalancers'[0].LoadBalancerArn --output text)
+
+
+##setup listener rules of the loadbalancer 
+aws elbv2 create-listener --load-balancer-arn $LoadBalancerArn --protocol HTTP --port 80  --default-actions Type=forward,TargetGroupArn=$TargetGroupArn1
+
+#listener arn
+ListenerArn1=$(aws elbv2 describe-listeners --load-balancer-arn $LoadBalancerArn --query 'Listeners'[0].ListenerArn --output text)
+
+aws elbv2 create-rule --listener-arn $ListenerArn1 --priority 10 --conditions Field=path-pattern,Values='/cluster1' --actions Type=forward,TargetGroupArn=$TargetGroupArn1
+aws elbv2 create-rule --listener-arn $ListenerArn1 --priority 9 --conditions Field=path-pattern,Values='/cluster2' --actions Type=forward,TargetGroupArn=$TargetGroupArn2
+
+   
+
+#delete loadbalancer 
+aws elbv2 delete-load-balancer --load-balancer-arn $LoadBalancerArn
+
+#get targetgroup arn and delete the two targetgroups one by one
+aws elbv2 delete-target-group --target-group-arn $TargetGroupArn1
+aws elbv2 delete-target-group --target-group-arn $TargetGroupArn2
+
 # terminate all instances
 # aws ec2 terminate-instances --instance-ids $(aws ec2 describe-instances --query "Reservations[].Instances[].[InstanceId]" --output text)
