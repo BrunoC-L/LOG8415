@@ -100,6 +100,12 @@ aws ec2 run-instances --image-id $ECSImageId --count 1 --instance-type t2.micro 
 
 VpcId=$(aws ec2 describe-vpcs --query 'Vpcs'[0].VpcId --output text)
 
+OldTargetGroups=$(aws elbv2 describe-target-groups --query 'TargetGroups[].TargetGroupArn' --output text)
+for targetGroup in $OldTargetGroups
+do
+    aws elbv2 delete-target-group --target-group-arn $targetGroup
+done
+
 # create target groups
 Cluster1Name=cluster1
 Cluster2Name=cluster2
