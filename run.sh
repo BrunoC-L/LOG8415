@@ -105,7 +105,7 @@ VpcId=$(aws ec2 describe-vpcs --query 'Vpcs'[0].VpcId --output text)
 Cluster1Name=cluster1
 Cluster2Name=cluster2
 TargetGroupArn1=$(aws elbv2 create-target-group --name $cluster1Name --protocol HTTP --port 80 --target-type instance --vpc-id $VpcId --query 'TargetGroups'[0].TargetGroupArn --output text)
-TargetGroupArn2=$(aws elbv2 create-target-group --name #cluster2Name --protocol HTTP --port 80 --target-type instance --vpc-id $VpcId --query 'TargetGroups'[0].TargetGroupArn --output text)
+TargetGroupArn2=$(aws elbv2 create-target-group --name $cluster2Name --protocol HTTP --port 80 --target-type instance --vpc-id $VpcId --query 'TargetGroups'[0].TargetGroupArn --output text)
 
 # add instances to target-group
 # TODO : obtenir les instance id 
