@@ -123,7 +123,9 @@ TargetGroupArn2=$(aws elbv2 create-target-group --name $Cluster2Name --protocol 
 
 # create loadbalancer
 # TODO subnet ids
-LoadBalancerArn=$(aws elbv2 create-load-balancer --name my-load-balancer --subnets subnet-04f197a80f791c8ed subnet-0e39e8d6bc1a91173 --query 'LoadBalancers'[0].LoadBalancerArn --output text)
+Subnet1=$(aws ec2 describe-subnets --filters Name=availability-zone,Values=us-east-1a --query Subnets[].SubnetId --output text)
+Subnet2=$(aws ec2 describe-subnets --filters Name=availability-zone,Values=us-east-1e --query Subnets[].SubnetId --output text)
+LoadBalancerArn=$(aws elbv2 create-load-balancer --name my-load-balancer --subnets $Subnet1 $Subnet2 --query 'LoadBalancers'[0].LoadBalancerArn --output text)
 
 # setup listener rules of the loadbalancer 
 ListenerArn1=$(aws elbv2 create-listener --load-balancer-arn $LoadBalancerArn --protocol HTTP --port 80 --default-actions Type=forward,TargetGroupArn=$TargetGroupArn1 --query 'Listeners'[0].ListenerArn --output text)
