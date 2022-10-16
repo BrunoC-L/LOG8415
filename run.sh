@@ -74,7 +74,7 @@ ECSImageId=ami-09a41e26df464c548
 DefaultSecurityGroup=$(aws ec2 describe-security-groups --query "SecurityGroups[].GroupId" --filters Name=group-name,Values=default --output text)
 
 OldInstances=$(aws ec2 describe-instances --query "Reservations[].Instances[].[InstanceId]" --output text)
-if [ $OldInstances != "" ] then
+if [ $OldInstances != "" ]; then
     for instance in $OldInstances
     do
         # remove dependency to sg (which means we cant delete sg), this has to be done while the instance is running or stopped (not terminating)
