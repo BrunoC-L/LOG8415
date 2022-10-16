@@ -98,7 +98,6 @@ aws ec2 authorize-security-group-ingress --group-id $SecurityGroup --protocol tc
 
 aws ec2 run-instances --image-id $ECSImageId --count 1 --instance-type t2.micro --security-group-ids $SecurityGroup --key-name vockey --user-data file://deployFlask.sh --query "Instances[].[InstanceId]" --output text
 
-# get vpc id 
 VpcId=$(aws ec2 describe-vpcs --query 'Vpcs'[0].VpcId --output text)
 
 # create target groups
@@ -124,15 +123,11 @@ LoadBalancerArn=$(aws elbv2 create-load-balancer --name my-load-balancer --subne
 ListenerArn1=$(aws elbv2 create-listener --load-balancer-arn $LoadBalancerArn --protocol HTTP --port 80 --default-actions Type=forward,TargetGroupArn=$TargetGroupArn1 --query 'Listeners'[0].ListenerArn --output text)
 
 aws elbv2 create-rule --listener-arn $ListenerArn1 --priority 10 --conditions Field=path-pattern,Values='/$Cluster1Name' --actions Type=forward,TargetGroupArn=$TargetGroupArn1
-aws elbv2 create-rule --listener-arn $ListenerArn1 --priority 9 --conditions Field=path-pattern,Values='/$Cluster2Name' --actions Type=forward,TargetGroupArn=$TargetGroupArn2
+aws elbv2 create-rule --listener-arn $ListenerArn1 --priority  9 --conditions Field=path-pattern,Values='/$Cluster2Name' --actions Type=forward,TargetGroupArn=$TargetGroupArn2
 
 
-# delete loadbalancer 
 aws elbv2 delete-load-balancer --load-balancer-arn $LoadBalancerArn
-
-# get target group arn and delete the two target groups one by one
 aws elbv2 delete-target-group --target-group-arn $TargetGroupArn1
 aws elbv2 delete-target-group --target-group-arn $TargetGroupArn2
-
 # terminate all instances
 aws ec2 terminate-instances --instance-ids $(aws ec2 describe-instances --query "Reservations[].Instances[].[InstanceId]" --output text)
