@@ -96,6 +96,16 @@ aws ec2 authorize-security-group-ingress --group-id $SecurityGroup --protocol tc
 aws ec2 authorize-security-group-ingress --group-id $SecurityGroup --protocol tcp --port 80   --cidr 0.0.0.0/0
 aws ec2 authorize-security-group-ingress --group-id $SecurityGroup --protocol tcp --port 8080 --cidr 0.0.0.0/0
 
+Zones=$(aws ec2 describe-subnets --filters Name=availability-zone,Values=us-east-1* --query Subnets[].SubnetId --output text)
+I=0
+for zone in $Zones
+do
+    if [ $I -lt 5 ]; then
+        echo $zone $I
+        ((I++))
+    fi
+done
+
 aws ec2 run-instances --image-id $ECSImageId --count 1 --instance-type t2.micro --security-group-ids $SecurityGroup --key-name vockey --user-data file://deployFlask.sh --query "Instances[].[InstanceId]" --output text
 
 VpcId=$(aws ec2 describe-vpcs --query 'Vpcs'[0].VpcId --output text)
