@@ -201,3 +201,4 @@ print(sys.argv[1].split(':')[-1])
 
 # https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-cloudwatch-metrics.html
 aws cloudwatch get-metric-statistics --namespace AWS/ApplicationELB --metric-name RequestCount --statistics Sum --dimensions Name=TargetGroup,Value=$(python arnToSimpleNameForCmd.py $TargetGroupArn1) Name=LoadBalancer,Value=$(python arnToSimpleNameForCmd.py $LoadBalancerArn) --start-time $Start --end-time $End  --period 1
+
