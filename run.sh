@@ -112,12 +112,13 @@ do
     if [ $I -lt $Count ]; then
         declare M4Large$I="$(aws ec2 run-instances --image-id $ECSImageId --count 1 --instance-type m4.large --security-group-ids $SecurityGroup --key-name vockey --user-data file://deployFlask.sh --placement AvailabilityZone=$zone --query "Instances[].[InstanceId]" --output text)"
         declare T2Large$I="$(aws ec2 run-instances --image-id $ECSImageId --count 1 --instance-type t2.large --security-group-ids $SecurityGroup --key-name vockey --user-data file://deployFlask.sh --placement AvailabilityZone=$zone --query "Instances[].[InstanceId]" --output text)"
+        declare Subnet$I=$(aws ec2 describe-subnets --filters Name=availability-zone,Values=$zone --query Subnets[].SubnetId --output text)
         ((I++))
     fi
 done
 
 echo "waiting for instances to be running"
-sleep 30
+sleep 30 # TODO change to a while
 
 VpcId=$(aws ec2 describe-vpcs --query 'Vpcs'[0].VpcId --output text) #default VPC
 
@@ -151,9 +152,16 @@ do
 done
 
 # create load balancer
-Subnet1=$(aws ec2 describe-subnets --filters Name=availability-zone,Values=us-east-1a --query Subnets[].SubnetId --output text)
-Subnet2=$(aws ec2 describe-subnets --filters Name=availability-zone,Values=us-east-1e --query Subnets[].SubnetId --output text)
-LoadBalancerArn=$(aws elbv2 create-load-balancer --name my-load-balancer --subnets $Subnet1 $Subnet2 --query 'LoadBalancers'[0].LoadBalancerArn --output text)
+Subnets=$(
+    I=0
+    while [ $I -lt $Count ];
+    do
+        name=Subnet$I
+        echo ${!name} \\
+    done
+)
+echo $Subnets
+LoadBalancerArn=$(aws elbv2 create-load-balancer --name my-load-balancer --subnets $Subnets --query 'LoadBalancers'[0].LoadBalancerArn --output text)
 
 # setup listener rules of the loadbalancer 
 Listener1=$(aws elbv2 create-listener --load-balancer-arn $LoadBalancerArn --protocol HTTP --port 80 --default-actions Type=forward,TargetGroupArn=$TargetGroupArn1 --query 'Listeners'[0].ListenerArn --output text)
