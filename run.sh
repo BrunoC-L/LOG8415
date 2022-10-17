@@ -128,9 +128,6 @@ Cluster2Name=cluster2
 TargetGroupArn1=$(aws elbv2 create-target-group --name $Cluster1Name --protocol HTTP --port 80 --target-type instance --vpc-id $VpcId --query 'TargetGroups'[0].TargetGroupArn --output text)
 TargetGroupArn2=$(aws elbv2 create-target-group --name $Cluster2Name --protocol HTTP --port 80 --target-type instance --vpc-id $VpcId --query 'TargetGroups'[0].TargetGroupArn --output text)
 
-# add instances to target-group
-# TODO : obtenir les instance id 
-
 Type1=M4Large
 Type2=T2Large
 for cluster in 1 2
@@ -142,15 +139,14 @@ do
             typename=Type$I 
             type=${!typename}
             instance=M4Large$I
-            if [ $I -gt 0 ]; then
-                echo ","
-            fi
-            echo Id=${!instance}
+            echo Id=${!instance} \\
             ((I++))
         done
+        echo
     )"
     TargetGroupArnName=TargetGroupArn$cluster
-    aws elbv2 register-targets --target-group-arn ${!TargetGroupArnName} -targets targets$cluster
+    targetsName=targets$cluster
+    aws elbv2 register-targets --target-group-arn ${!TargetGroupArnName} --targets "${!targetsName}"
 done
 
 #cluster 1
