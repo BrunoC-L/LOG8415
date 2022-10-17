@@ -126,7 +126,7 @@ do
 done
 
 echo "waiting for instances to be running"
-sleep 30 # TODO change to a while
+
 
 VpcId=$(aws ec2 describe-vpcs --query 'Vpcs'[0].VpcId --output text) #default VPC
 
