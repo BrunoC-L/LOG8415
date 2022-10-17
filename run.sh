@@ -5,8 +5,7 @@
 
 # Write script to run on the instances as `deployFlask.sh`
 echo '#!/bin/bash'"
-echo 1 > /var/log/user-data.log
-apt-get update
+apt-get update > /var/log/user-data.log
 apt-get install -y python3
 apt-get install -y python3-pip
 apt-get install -y python3-venv
@@ -96,9 +95,13 @@ do
 done
 
 SecurityGroup=$(aws ec2 create-security-group --description "Flask Group" --group-name flask-group --output text)
+# enable inbound ssh to debug and http for us to view the webapp
 aws ec2 authorize-security-group-ingress --group-id $SecurityGroup --protocol tcp --port 22   --cidr 0.0.0.0/0
 aws ec2 authorize-security-group-ingress --group-id $SecurityGroup --protocol tcp --port 80   --cidr 0.0.0.0/0
 aws ec2 authorize-security-group-ingress --group-id $SecurityGroup --protocol tcp --port 8080 --cidr 0.0.0.0/0
+# for downloads, enable http/https outbound
+aws ec2 authorize-security-group-egress  --group-id $SecurityGroup --protocol tcp --port 80   --cidr 0.0.0.0/0
+aws ec2 authorize-security-group-egress  --group-id $SecurityGroup --protocol tcp --port 443  --cidr 0.0.0.0/0
 
 Zones=$(aws ec2 describe-subnets --filters Name=availability-zone,Values=us-east-1* --query Subnets[].AvailabilityZone --output text)
 I=0
