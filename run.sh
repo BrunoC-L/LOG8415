@@ -158,6 +158,7 @@ Subnets=$(
     do
         name=Subnet$I
         echo ${!name} \\
+        ((I++))
     done
 )
 echo $Subnets
