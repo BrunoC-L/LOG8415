@@ -101,7 +101,7 @@ aws ec2 authorize-security-group-ingress --group-id $SecurityGroup --protocol tc
 
 Zones=$(aws ec2 describe-subnets --filters Name=availability-zone,Values=us-east-1* --query Subnets[].AvailabilityZone --output text)
 I=0
-Count=1 # has to be 5 for 'release'
+Count=5 # has to be 5 for 'release'
 for zone in $Zones
 do
     if [ $I -lt $Count ]; then
@@ -131,19 +131,26 @@ TargetGroupArn2=$(aws elbv2 create-target-group --name $Cluster2Name --protocol 
 # add instances to target-group
 # TODO : obtenir les instance id 
 
+Type1=M4Large
+Type2=T2Large
 for cluster in 1 2
 do
-    I=0
     declare targets$cluster="$(
+        I=0
         while [ $I -lt $Count ];
         do
-            m4name=M4Large$I
-            t2name=T2Large$I
-            echo ${!m4name} ${!t2name}
+            typename=Type$I 
+            type=${!typename}
+            instance=M4Large$I
+            if [ $I -gt 0 ]; then
+                echo ","
+            fi
+            echo Id=${!instance}
             ((I++))
         done
     )"
-#     aws elbv2 register-targets --target-group-arn TargetGroupArn1 -targets Id=TODO instance ID i-0abcdef1234567890 Id=i-1234567890abcdef0
+    TargetGroupArnName=TargetGroupArn$cluster
+    aws elbv2 register-targets --target-group-arn ${!TargetGroupArnName} -targets targets$cluster
 done
 
 #cluster 1
