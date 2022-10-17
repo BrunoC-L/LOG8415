@@ -24,6 +24,11 @@ echo \"from flask import Flask
 import subprocess
 app = Flask(__name__)
 instance_id = subprocess.check_output(['curl', 'http://169.254.169.254/latest/meta-data/instance-id'])
+print(instance_id)
+t = type(instance_id)
+print(t)
+u = str(t)
+print(u)
 @app.route('/')
 def my_app():
     return 'Instance '+ instance_id + ' is responding now'
