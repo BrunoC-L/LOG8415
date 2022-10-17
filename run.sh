@@ -23,15 +23,11 @@ pip install gunicorn
 echo \"from flask import Flask
 import subprocess
 app = Flask(__name__)
-instance_id = subprocess.check_output(['curl', 'http://169.254.169.254/latest/meta-data/instance-id'])
+instance_id = subprocess.check_output(['curl', 'http://169.254.169.254/latest/meta-data/instance-id']).decode('utf-8')
 print(instance_id)
-t = type(instance_id)
-print(t)
-u = str(t)
-print(u)
 @app.route('/')
 def my_app():
-    return 'Instance is responding now'
+    return f'Instance {instance_id} is responding now'
 if __name__=='__main__':
     app.run(port=8080)\" > my_app.py
 
