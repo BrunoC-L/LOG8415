@@ -132,43 +132,34 @@ Type1=M4Large
 Type2=T2Large
 for cluster in 1 2
 do
-    declare targets$cluster="$(
-        I=0
-        while [ $I -lt $Count ];
-        do
-            typename=Type$I 
-            type=${!typename}
-            instance=M4Large$I
-            echo Id=${!instance} \\
-            ((I++))
-        done
-        echo
-    )"
     TargetGroupArnName=TargetGroupArn$cluster
     targetsName=targets$cluster
-    aws elbv2 register-targets --target-group-arn ${!TargetGroupArnName} --targets "${!targetsName}"
+    I=0
+    while [ $I -lt $Count ];
+    do
+        typename=Type$I 
+        type=${!typename}
+        instance=M4Large$I
+        aws elbv2 register-targets --target-group-arn ${!TargetGroupArnName} --targets Id=${!instance}
+        ((I++))
+    done
 done
 
-#cluster 1
-#cluster 2
-aws elbv2 register-targets --target-group-arn TargetGroupArn2 -targets Id=TODO i-0abcdef1234567890 Id=i-1234567890abcdef0
-
-
-# create loadbalancer
-# TODO subnet ids
+# create load balancer
 Subnet1=$(aws ec2 describe-subnets --filters Name=availability-zone,Values=us-east-1a --query Subnets[].SubnetId --output text)
 Subnet2=$(aws ec2 describe-subnets --filters Name=availability-zone,Values=us-east-1e --query Subnets[].SubnetId --output text)
 LoadBalancerArn=$(aws elbv2 create-load-balancer --name my-load-balancer --subnets $Subnet1 $Subnet2 --query 'LoadBalancers'[0].LoadBalancerArn --output text)
 
 # setup listener rules of the loadbalancer 
-ListenerArn1=$(aws elbv2 create-listener --load-balancer-arn $LoadBalancerArn --protocol HTTP --port 80 --default-actions Type=forward,TargetGroupArn=$TargetGroupArn1 --query 'Listeners'[0].ListenerArn --output text)
-
-aws elbv2 create-rule --listener-arn $ListenerArn1 --priority 10 --conditions Field=path-pattern,Values='/$Cluster1Name' --actions Type=forward,TargetGroupArn=$TargetGroupArn1
-aws elbv2 create-rule --listener-arn $ListenerArn1 --priority  9 --conditions Field=path-pattern,Values='/$Cluster2Name' --actions Type=forward,TargetGroupArn=$TargetGroupArn2
-
+Listener1=$(aws elbv2 create-listener --load-balancer-arn $LoadBalancerArn --protocol HTTP --port 80 --default-actions Type=forward,TargetGroupArn=$TargetGroupArn1 --query 'Listeners'[0].ListenerArn --output text)
+# using _ to discard output
+_=$(aws elbv2 create-rule --listener-arn $Listener1 --priority 10 --conditions Field=path-pattern,Values='/$Cluster1Name' --actions Type=forward,TargetGroupArn=$TargetGroupArn1)
+_=$(aws elbv2 create-rule --listener-arn $Listener1 --priority  9 --conditions Field=path-pattern,Values='/$Cluster2Name' --actions Type=forward,TargetGroupArn=$TargetGroupArn2)
 
 aws elbv2 delete-load-balancer --load-balancer-arn $LoadBalancerArn
+aws elbv2 delete-listener --listener-arn $Listener1
 aws elbv2 delete-target-group --target-group-arn $TargetGroupArn1
 aws elbv2 delete-target-group --target-group-arn $TargetGroupArn2
-# terminate all instances
-aws ec2 terminate-instances --instance-ids $(aws ec2 describe-instances --query "Reservations[].Instances[].[InstanceId]" --output text)
+
+# terminate running instances
+aws ec2 terminate-instances --instance-ids $(aws ec2 describe-instances --filters Name=instance-state-name,Values=running --query "Reservations[].Instances[].[InstanceId]" --output text)
