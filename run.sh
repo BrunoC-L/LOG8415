@@ -5,6 +5,7 @@
 
 # Write script to run on the instances as `deployFlask.sh`
 echo '#!/bin/bash'"
+echo 1 > /var/log/user-data.log
 apt-get update
 apt-get install -y python3
 apt-get install -y python3-pip
