@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-# Open this as raw copy url and run `curl <url> > run.sh && sh run.sh`
+# Open this as raw copy url and run `curl <url> > run.sh && bash run.sh`
 
 # Write script to run on the instances as `deployFlask.sh`
 echo '#!/bin/bash'"
