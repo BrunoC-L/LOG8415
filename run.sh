@@ -1,7 +1,7 @@
 #!/bin/bash
 # Open this as raw copy url and run `curl <url> > run.sh && bash run.sh`
 # Write script to run on the instances as `deployFlask.sh`
-echo '#!/bin/bash'" \
+echo '#!/bin/bash'" 
 apt-get update > /var/log/user-data.log
 apt-get install -y python3
 apt-get install -y python3-pip
@@ -122,7 +122,6 @@ do
     fi
 done
 
-echo "waiting for instances to be running"
 
 
 VpcId=$(aws ec2 describe-vpcs --query 'Vpcs'[0].VpcId --output text) #default VPC
@@ -147,6 +146,8 @@ do
     do
         instanceName=$type$I
         instance=${!instanceName}
+        echo "waiting for instances to be running"
+        aws ec2 wait instance-status-ok --instance-ids $instance
         aws elbv2 register-targets --target-group-arn $TargetGroupArn --targets Id=$instance
         ((I++))
     done
@@ -164,7 +165,8 @@ Subnets=$(
 )
 
 LoadBalancerArn=$(aws elbv2 create-load-balancer --name my-load-balancer --subnets $Subnets --security-groups $SecurityGroup --query 'LoadBalancers'[0].LoadBalancerArn --output text)
-
+echo "waiting for load balancer to be available"
+aws elbv2 wait load-balancer-available --load-balancer-arns $LoadBalancerArn
 # setup listener rules of the loadbalancer 
 Listener1=$(aws elbv2 create-listener --load-balancer-arn $LoadBalancerArn --protocol HTTP --port 80 --default-actions Type=forward,TargetGroupArn=$TargetGroupArn1 --query 'Listeners'[0].ListenerArn --output text)
 # using _ to discard output
