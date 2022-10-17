@@ -141,7 +141,7 @@ do
     I=0
     while [ $I -lt $Count ];
     do
-        typename=Type$I 
+        typename=Type$cluster 
         type=${!typename}
         instance=$type$I
         aws elbv2 register-targets --target-group-arn ${!TargetGroupArnName} --targets Id=${!instance}
