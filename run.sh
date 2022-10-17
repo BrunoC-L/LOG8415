@@ -144,7 +144,7 @@ do
     do
         typename=Type$I 
         type=${!typename}
-        instance=M4Large$I
+        instance=$type$I
         aws elbv2 register-targets --target-group-arn ${!TargetGroupArnName} --targets Id=${!instance}
         ((I++))
     done
