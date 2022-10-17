@@ -181,3 +181,17 @@ _=$(aws elbv2 create-rule --listener-arn $Listener1 --priority  9 --conditions F
 
 # terminate running instances
 # aws ec2 terminate-instances --instance-ids $(aws ec2 describe-instances --filters Name=instance-state-name,Values=running --query "Reservations[].Instances[].[InstanceId]" --output text)
+
+Start=$(date '+%Y-%m-%dT%H:%M:%SZ')
+I=0
+Count=1000
+while [ $I -lt $Count ];
+do
+    curl my-load-balancer-1558977337.us-east-1.elb.amazonaws.com/cluster1 &
+    curl my-load-balancer-1558977337.us-east-1.elb.amazonaws.com/cluster2 &
+    ((I++))
+done
+End=$(date '+%Y-%m-%dT%H:%M:%SZ')
+sleep 1
+# https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-cloudwatch-metrics.html
+aws cloudwatch get-metric-statistics --namespace AWS/ApplicationELB --metric-name RequestCount --statistics Sum --dimensions Name=TargetGroup,Value=??? Name=LoadBalancer,Value=??? --start-time $Start --end-time $End  --period 1
