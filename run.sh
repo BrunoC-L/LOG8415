@@ -29,8 +29,8 @@ print(instance_id)
 def my_app():
     return f'Instance {instance_id} is responding now'
 @app.route('/<cluster>')
-def my_app_cluster():
-    return f'Instance {instance_id} is responding now'
+def my_app_cluster(cluster):
+    return f'Instance {instance_id} from cluster {cluster} is responding now'
 if __name__=='__main__':
     app.run()\" > my_app.py
 
