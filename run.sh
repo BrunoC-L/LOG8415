@@ -134,7 +134,6 @@ for cluster in 1 2
 do
     declare TargetGroupArn$cluster=$(aws elbv2 create-target-group --name cluster$cluster --protocol HTTP --port 80 --target-type instance --vpc-id $VpcId --query 'TargetGroups'[0].TargetGroupArn --output text)
     TargetGroupArnName=TargetGroupArn$cluster
-    targetsName=targets$cluster
     typename=Type$cluster 
     type=${!typename}
     I=0
