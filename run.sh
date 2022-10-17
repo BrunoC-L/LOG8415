@@ -157,7 +157,7 @@ Subnets=$(
     while [ $I -lt $Count ];
     do
         name=Subnet$I
-        echo ${!name} \\
+        echo ${!name}
         ((I++))
     done
 )
