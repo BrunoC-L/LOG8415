@@ -99,7 +99,7 @@ SecurityGroup=$(aws ec2 create-security-group --description "Flask Group" --grou
 # enable inbound ssh to debug and http for us to view the webapp
 aws ec2 authorize-security-group-ingress --group-id $SecurityGroup --protocol tcp --port 22   --cidr 0.0.0.0/0
 aws ec2 authorize-security-group-ingress --group-id $SecurityGroup --protocol tcp --port 80   --cidr 0.0.0.0/0
-aws ec2 authorize-security-group-ingress --group-id $SecurityGroup --protocol tcp --port 8080 --cidr 0.0.0.0/0
+aws ec2 authorize-security-group-ingress --group-id $SecurityGroup --protocol tcp --port 443 --cidr 0.0.0.0/0
 # for downloads, enable http/https outbound
 aws ec2 authorize-security-group-egress  --group-id $SecurityGroup --protocol tcp --port 80   --cidr 0.0.0.0/0
 aws ec2 authorize-security-group-egress  --group-id $SecurityGroup --protocol tcp --port 443  --cidr 0.0.0.0/0
@@ -158,6 +158,12 @@ Subnets=$(
     done
 )
 echo $Subnets
+
+for loadbalancer in $(aws elbv2 describe-load-balancers --query LoadBalancers[].LoadBalancerArn --output text)
+do
+    aws elbv2 delete-load-balancer --load-balancer-arn $loadbalancer
+done
+
 LoadBalancerArn=$(aws elbv2 create-load-balancer --name my-load-balancer --subnets $Subnets --query 'LoadBalancers'[0].LoadBalancerArn --output text)
 
 # setup listener rules of the loadbalancer 
