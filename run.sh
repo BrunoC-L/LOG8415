@@ -29,7 +29,7 @@ print(instance_id)
 def my_app():
     return f'Instance {instance_id} is responding now'
 if __name__=='__main__':
-    app.run(port=8080)\" > my_app.py
+    app.run()\" > my_app.py
 
 echo \"[Unit]
 Description=Gunicorn instance for a simple flask app
