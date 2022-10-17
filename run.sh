@@ -31,7 +31,7 @@ u = str(t)
 print(u)
 @app.route('/')
 def my_app():
-    return 'Instance '+ instance_id + ' is responding now'
+    return 'Instance is responding now'
 if __name__=='__main__':
     app.run(port=8080)\" > my_app.py
 
