@@ -134,14 +134,15 @@ TargetGroupArn2=$(aws elbv2 create-target-group --name $Cluster2Name --protocol 
 for cluster in 1 2
 do
     I=0
-    declare targets$cluster=$(
-        while [ $I -lt $Count ]
+    declare targets$cluster="$(
+        while [ $I -lt $Count ];
         do
             m4name=M4Large$I
             t2name=T2Large$I
             echo ${!m4name} ${!t2name}
+            ((I++))
         done
-    )
+    )"
 #     aws elbv2 register-targets --target-group-arn TargetGroupArn1 -targets Id=TODO instance ID i-0abcdef1234567890 Id=i-1234567890abcdef0
 done
 
