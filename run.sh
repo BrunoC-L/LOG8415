@@ -108,7 +108,10 @@ do
     fi
 done
 
-VpcId=$(aws ec2 describe-vpcs --query 'Vpcs'[0].VpcId --output text)
+echo "waiting for instances to be running"
+sleep 30
+
+VpcId=$(aws ec2 describe-vpcs --query 'Vpcs'[0].VpcId --output text) #default VPC
 
 OldTargetGroups=$(aws elbv2 describe-target-groups --query 'TargetGroups[].TargetGroupArn' --output text)
 for targetGroup in $OldTargetGroups
