@@ -129,10 +129,8 @@ do
 done
 
 # create target groups
-Cluster1Name=cluster1
-Cluster2Name=cluster2
-TargetGroupArn1=$(aws elbv2 create-target-group --name $Cluster1Name --protocol HTTP --port 80 --target-type instance --vpc-id $VpcId --query 'TargetGroups'[0].TargetGroupArn --output text)
-TargetGroupArn2=$(aws elbv2 create-target-group --name $Cluster2Name --protocol HTTP --port 80 --target-type instance --vpc-id $VpcId --query 'TargetGroups'[0].TargetGroupArn --output text)
+TargetGroupArn1=$(aws elbv2 create-target-group --name cluster1 --protocol HTTP --port 80 --target-type instance --vpc-id $VpcId --query 'TargetGroups'[0].TargetGroupArn --output text)
+TargetGroupArn2=$(aws elbv2 create-target-group --name cluster2 --protocol HTTP --port 80 --target-type instance --vpc-id $VpcId --query 'TargetGroups'[0].TargetGroupArn --output text)
 
 Type1=M4Large
 Type2=T2Large
@@ -167,8 +165,8 @@ LoadBalancerArn=$(aws elbv2 create-load-balancer --name my-load-balancer --subne
 # setup listener rules of the loadbalancer 
 Listener1=$(aws elbv2 create-listener --load-balancer-arn $LoadBalancerArn --protocol HTTP --port 80 --default-actions Type=forward,TargetGroupArn=$TargetGroupArn1 --query 'Listeners'[0].ListenerArn --output text)
 # using _ to discard output
-_=$(aws elbv2 create-rule --listener-arn $Listener1 --priority 10 --conditions Field=path-pattern,Values='/$Cluster1Name' --actions Type=forward,TargetGroupArn=$TargetGroupArn1)
-_=$(aws elbv2 create-rule --listener-arn $Listener1 --priority  9 --conditions Field=path-pattern,Values='/$Cluster2Name' --actions Type=forward,TargetGroupArn=$TargetGroupArn2)
+_=$(aws elbv2 create-rule --listener-arn $Listener1 --priority 10 --conditions Field=path-pattern,Values='/cluster1' --actions Type=forward,TargetGroupArn=$TargetGroupArn1)
+_=$(aws elbv2 create-rule --listener-arn $Listener1 --priority  9 --conditions Field=path-pattern,Values='/cluster2' --actions Type=forward,TargetGroupArn=$TargetGroupArn2)
 
 aws elbv2 delete-load-balancer --load-balancer-arn $LoadBalancerArn
 aws elbv2 delete-listener --listener-arn $Listener1
