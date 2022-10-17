@@ -140,8 +140,9 @@ do
     I=0
     while [ $I -lt $Count ];
     do
-        instance=$type$I
-        aws elbv2 register-targets --target-group-arn $TargetGroupArnName --targets Id=${!instance}
+        instanceName=$type$I
+        instance=${!instanceName}
+        aws elbv2 register-targets --target-group-arn $TargetGroupArnName --targets Id=$instance
         ((I++))
     done
 done
