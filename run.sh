@@ -163,7 +163,7 @@ do
     aws elbv2 delete-load-balancer --load-balancer-arn $loadbalancer
 done
 
-LoadBalancerArn=$(aws elbv2 create-load-balancer --name my-load-balancer --subnets $Subnets --query 'LoadBalancers'[0].LoadBalancerArn --output text)
+LoadBalancerArn=$(aws elbv2 create-load-balancer --name my-load-balancer --subnets $Subnets --security-groups $SecurityGroup --query 'LoadBalancers'[0].LoadBalancerArn --output text)
 
 # setup listener rules of the loadbalancer 
 Listener1=$(aws elbv2 create-listener --load-balancer-arn $LoadBalancerArn --protocol HTTP --port 80 --default-actions Type=forward,TargetGroupArn=$TargetGroupArn1 --query 'Listeners'[0].ListenerArn --output text)
