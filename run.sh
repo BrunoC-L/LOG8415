@@ -28,7 +28,7 @@ instance_id = subprocess.check_output(['curl', 'http://169.254.169.254/latest/me
 def my_app():
     return 'Instance '+ instance_id + ' is responding now'
 if __name__=='__main__':
-    app.run()\" > my_app.py
+    app.run(port=8080)\" > my_app.py
 
 echo \"[Unit]
 Description=Gunicorn instance for a simple flask app
