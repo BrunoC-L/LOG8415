@@ -75,7 +75,6 @@ systemctl restart nginx" > deployFlask.sh
 python3 -m pip install --upgrade pip
 pip3 install boto3
 
-# ECSImageId=$(aws ec2 describe-images --owners amazon --filters "Name=name,Values=amzn2-ami-ecs*" --query 'sort_by(Images, &CreationDate)[].Name' --query 'sort_by(Images, &CreationDate)[-1].ImageId' --output text)
 ECSImageId=ami-09a41e26df464c548
 
 DefaultSecurityGroup=$(aws ec2 describe-security-groups --query "SecurityGroups[].GroupId" --filters Name=group-name,Values=default --output text)
@@ -89,6 +88,12 @@ if [ "$OldInstances" != "" ]; then
     done
     aws ec2 terminate-instances --instance-ids $OldInstances
 fi
+
+for loadbalancer in $(aws elbv2 describe-load-balancers --query LoadBalancers[].LoadBalancerArn --output text)
+do
+    aws elbv2 delete-load-balancer --load-balancer-arn $loadbalancer
+done
+
 
 OldGroups=$(aws ec2 describe-security-groups --query "SecurityGroups[].GroupId" --output text)
 for group in $OldGroups
@@ -160,11 +165,6 @@ Subnets=$(
         ((I++))
     done
 )
-
-for loadbalancer in $(aws elbv2 describe-load-balancers --query LoadBalancers[].LoadBalancerArn --output text)
-do
-    aws elbv2 delete-load-balancer --load-balancer-arn $loadbalancer
-done
 
 LoadBalancerArn=$(aws elbv2 create-load-balancer --name my-load-balancer --subnets $Subnets --security-groups $SecurityGroup --query 'LoadBalancers'[0].LoadBalancerArn --output text)
 
