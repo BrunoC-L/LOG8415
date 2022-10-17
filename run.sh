@@ -183,6 +183,7 @@ _=$(aws elbv2 create-rule --listener-arn $Listener1 --priority  9 --conditions F
 # aws ec2 terminate-instances --instance-ids $(aws ec2 describe-instances --filters Name=instance-state-name,Values=running --query "Reservations[].Instances[].[InstanceId]" --output text)
 
 Start=$(date '+%Y-%m-%dT%H:%M:%SZ')
+sleep 20
 I=0
 Count=1000
 while [ $I -lt $Count ];
@@ -192,7 +193,7 @@ do
     ((I++))
 done
 End=$(date '+%Y-%m-%dT%H:%M:%SZ')
-sleep 1
+sleep 20
 
 echo "
 import sys
