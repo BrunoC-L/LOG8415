@@ -172,10 +172,10 @@ Listener1=$(aws elbv2 create-listener --load-balancer-arn $LoadBalancerArn --pro
 _=$(aws elbv2 create-rule --listener-arn $Listener1 --priority 10 --conditions Field=path-pattern,Values='/cluster1' --actions Type=forward,TargetGroupArn=$TargetGroupArn1)
 _=$(aws elbv2 create-rule --listener-arn $Listener1 --priority  9 --conditions Field=path-pattern,Values='/cluster2' --actions Type=forward,TargetGroupArn=$TargetGroupArn2)
 
-aws elbv2 delete-load-balancer --load-balancer-arn $LoadBalancerArn
-aws elbv2 delete-listener --listener-arn $Listener1
-aws elbv2 delete-target-group --target-group-arn $TargetGroupArn1
-aws elbv2 delete-target-group --target-group-arn $TargetGroupArn2
+# aws elbv2 delete-load-balancer --load-balancer-arn $LoadBalancerArn
+# aws elbv2 delete-listener --listener-arn $Listener1
+# aws elbv2 delete-target-group --target-group-arn $TargetGroupArn1
+# aws elbv2 delete-target-group --target-group-arn $TargetGroupArn2
 
 # terminate running instances
-aws ec2 terminate-instances --instance-ids $(aws ec2 describe-instances --filters Name=instance-state-name,Values=running --query "Reservations[].Instances[].[InstanceId]" --output text)
+# aws ec2 terminate-instances --instance-ids $(aws ec2 describe-instances --filters Name=instance-state-name,Values=running --query "Reservations[].Instances[].[InstanceId]" --output text)
