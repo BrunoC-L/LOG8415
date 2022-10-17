@@ -193,5 +193,11 @@ do
 done
 End=$(date '+%Y-%m-%dT%H:%M:%SZ')
 sleep 1
+
+echo "
+import sys
+print(sys.argv[1].split(':')[-1])
+" > arnToSimpleNameForCmd.py
+
 # https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-cloudwatch-metrics.html
 aws cloudwatch get-metric-statistics --namespace AWS/ApplicationELB --metric-name RequestCount --statistics Sum --dimensions Name=TargetGroup,Value=??? Name=LoadBalancer,Value=??? --start-time $Start --end-time $End  --period 1
