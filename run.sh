@@ -101,7 +101,7 @@ aws ec2 authorize-security-group-ingress --group-id $SecurityGroup --protocol tc
 
 Zones=$(aws ec2 describe-subnets --filters Name=availability-zone,Values=us-east-1* --query Subnets[].AvailabilityZone --output text)
 I=0
-Count=5 # has to be 5 for 'release'
+Count=1 # has to be 5 for 'release'
 for zone in $Zones
 do
     if [ $I -lt $Count ]; then
