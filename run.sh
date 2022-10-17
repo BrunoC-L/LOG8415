@@ -134,7 +134,7 @@ for cluster in 1 2
 do
     declare TargetGroupArn$cluster=$(aws elbv2 create-target-group --name cluster$cluster --protocol HTTP --port 80 --target-type instance --vpc-id $VpcId --query 'TargetGroups'[0].TargetGroupArn --output text)
     TargetGroupArnName=TargetGroupArn$cluster
-    TargetGroupArnName=${!TargetGroupArnName}
+    TargetGroupArn=${!TargetGroupArnName}
     typename=Type$cluster 
     type=${!typename}
     I=0
@@ -142,7 +142,7 @@ do
     do
         instanceName=$type$I
         instance=${!instanceName}
-        aws elbv2 register-targets --target-group-arn $TargetGroupArnName --targets Id=$instance
+        aws elbv2 register-targets --target-group-arn $TargetGroupArn --targets Id=$instance
         ((I++))
     done
 done
