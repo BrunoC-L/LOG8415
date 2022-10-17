@@ -157,7 +157,6 @@ Subnets=$(
         ((I++))
     done
 )
-echo $Subnets
 
 for loadbalancer in $(aws elbv2 describe-load-balancers --query LoadBalancers[].LoadBalancerArn --output text)
 do
