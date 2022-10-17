@@ -128,14 +128,11 @@ do
     aws elbv2 delete-target-group --target-group-arn $targetGroup
 done
 
-# create target groups
-TargetGroupArn1=$(aws elbv2 create-target-group --name cluster1 --protocol HTTP --port 80 --target-type instance --vpc-id $VpcId --query 'TargetGroups'[0].TargetGroupArn --output text)
-TargetGroupArn2=$(aws elbv2 create-target-group --name cluster2 --protocol HTTP --port 80 --target-type instance --vpc-id $VpcId --query 'TargetGroups'[0].TargetGroupArn --output text)
-
 Type1=M4Large
 Type2=T2Large
 for cluster in 1 2
 do
+    declare TargetGroupArn$cluster=$(aws elbv2 create-target-group --name cluster$cluster --protocol HTTP --port 80 --target-type instance --vpc-id $VpcId --query 'TargetGroups'[0].TargetGroupArn --output text)
     TargetGroupArnName=TargetGroupArn$cluster
     targetsName=targets$cluster
     I=0
