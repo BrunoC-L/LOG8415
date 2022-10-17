@@ -76,7 +76,7 @@ ECSImageId=ami-09a41e26df464c548
 
 DefaultSecurityGroup=$(aws ec2 describe-security-groups --query "SecurityGroups[].GroupId" --filters Name=group-name,Values=default --output text)
 
-OldInstances=$(aws ec2 describe-instances --query "Reservations[].Instances[].[InstanceId]" --output text)
+OldInstances=$(aws ec2 describe-instances --filters Name=instance-state-name,Values=running --query "Reservations[].Instances[].[InstanceId]" --output text)
 if [ "$OldInstances" != "" ]; then
     for instance in $OldInstances
     do
@@ -101,10 +101,10 @@ aws ec2 authorize-security-group-ingress --group-id $SecurityGroup --protocol tc
 
 Zones=$(aws ec2 describe-subnets --filters Name=availability-zone,Values=us-east-1* --query Subnets[].AvailabilityZone --output text)
 I=0
-COUNT=1 # has to be 5 for 'release'
+Count=1 # has to be 5 for 'release'
 for zone in $Zones
 do
-    if [ $I -lt $COUNT ]; then
+    if [ $I -lt $Count ]; then
         declare M4Large$I="$(aws ec2 run-instances --image-id $ECSImageId --count 1 --instance-type m4.large --security-group-ids $SecurityGroup --key-name vockey --user-data file://deployFlask.sh --placement AvailabilityZone=$zone --query "Instances[].[InstanceId]" --output text)"
         declare T2Large$I="$(aws ec2 run-instances --image-id $ECSImageId --count 1 --instance-type t2.large --security-group-ids $SecurityGroup --key-name vockey --user-data file://deployFlask.sh --placement AvailabilityZone=$zone --query "Instances[].[InstanceId]" --output text)"
         ((I++))
@@ -131,10 +131,23 @@ TargetGroupArn2=$(aws elbv2 create-target-group --name $Cluster2Name --protocol 
 # add instances to target-group
 # TODO : obtenir les instance id 
 
+for cluster in 1 2
+do
+    I=0
+    declare targets$cluster=$(
+        while [ $I -lt $Count ]
+        do
+            m4name=M4Large$I
+            t2name=T2Large$I
+            echo ${!m4name} ${!t2name}
+        done
+    )
+#     aws elbv2 register-targets --target-group-arn TargetGroupArn1 -targets Id=TODO instance ID i-0abcdef1234567890 Id=i-1234567890abcdef0
+done
+
 #cluster 1
-#aws elbv2 register-targets --target-group-arn TargetGroupArn1 -targets Id=TODO instance ID i-0abcdef1234567890 Id=i-1234567890abcdef0
 #cluster 2
-#aws elbv2 register-targets --target-group-arn TargetGroupArn2 -targets Id=TODO i-0abcdef1234567890 Id=i-1234567890abcdef0
+aws elbv2 register-targets --target-group-arn TargetGroupArn2 -targets Id=TODO i-0abcdef1234567890 Id=i-1234567890abcdef0
 
 
 # create loadbalancer
