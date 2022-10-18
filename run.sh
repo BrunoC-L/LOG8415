@@ -196,9 +196,9 @@ do
     ((I++))
 done
 sleep 5
+End=$(env TZ=London date '+%Y-%m-%dT%H:%M:%SZ')
 echo "Waiting for cloudwatch to update data... (10 minutes to be safe)"
 sleep 600
-End=$(env TZ=London date '+%Y-%m-%dT%H:%M:%SZ')
 
 echo "
 import sys
