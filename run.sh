@@ -182,7 +182,7 @@ _=$(aws elbv2 create-rule --listener-arn $Listener1 --priority  9 --conditions F
 # terminate running instances
 # aws ec2 terminate-instances --instance-ids $(aws ec2 describe-instances --filters Name=instance-state-name,Values=running --query "Reservations[].Instances[].[InstanceId]" --output text)
 
-LBURL=$(aws elbv2 describe-load-balancers --query LoadBalancers[0].DNSName)
+LBURL=$(aws elbv2 describe-load-balancers --query LoadBalancers[0].DNSName --output text)
 Start=$(env TZ=London date '+%Y-%m-%dT%H:%M:%SZ')
 sleep 60
 I=0
