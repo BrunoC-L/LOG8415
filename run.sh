@@ -87,13 +87,15 @@ if [ "$OldInstances" != "" ]; then
         aws ec2 modify-instance-attribute --instance-id $instance --groups $DefaultSecurityGroup
     done
     aws ec2 terminate-instances --instance-ids $OldInstances
+    sleep 10
 fi
 
 for loadbalancer in $(aws elbv2 describe-load-balancers --query LoadBalancers[].LoadBalancerArn --output text)
 do
     aws elbv2 delete-load-balancer --load-balancer-arn $loadbalancer
+    echo "waiting for load balancer to be unregistered from security group"
+    sleep 30
 done
-
 
 OldGroups=$(aws ec2 describe-security-groups --query "SecurityGroups[].GroupId" --output text)
 for group in $OldGroups
