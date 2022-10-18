@@ -207,3 +207,8 @@ print(s)
 # https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-cloudwatch-metrics.html
 aws cloudwatch get-metric-statistics --namespace AWS/ApplicationELB --metric-name RequestCountPerTarget --statistics Sum --dimensions Name=TargetGroup,Value=$(python arnToSimpleNameForCmd.py $TargetGroupArn1) --start-time $Start --end-time $End  --period 10
 aws cloudwatch get-metric-statistics --namespace AWS/ApplicationELB --metric-name TargetResponseTime --statistics Average --dimensions Name=TargetGroup,Value=$(python arnToSimpleNameForCmd.py $TargetGroupArn1) Name=LoadBalancer,Value=$(python arnToSimpleNameForCmd.py $LoadBalancerArn)  --start-time $Start --end-time $End  --period 10
+for instance in $(aws ec2 describe-instances --filters Name=instance-state-name,Values=running --query "Reservations[].Instances[].[InstanceId]" --output text)
+do
+    aws cloudwatch get-metric-statistics --namespace AWS/EC2 --metric-name CPUUtilization --statistics Average --dimensions Name=InstanceId,Value=$instance --start-time $Start --end-time $End  --period 30
+done
+
