@@ -193,8 +193,9 @@ do
     curl $LBURL/cluster2 &
     ((I++))
 done
+sleep 5
 echo "Waiting for cloudwatch to update data... (3 minutes to be safe)"
-sleep 180
+sleep 185
 End=$(env TZ=London date '+%Y-%m-%dT%H:%M:%SZ')
 
 echo "
