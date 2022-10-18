@@ -114,7 +114,7 @@ aws ec2 authorize-security-group-egress  --group-id $SecurityGroup --protocol tc
 
 Zones=$(aws ec2 describe-subnets --filters Name=availability-zone,Values=us-east-1* --query Subnets[].AvailabilityZone --output text)
 I=0
-Count=2 # has to be 5 for 'release'
+Count=5 # has to be 5 for 'release'
 for zone in $Zones
 do
     if [ $I -lt $Count ]; then
@@ -209,6 +209,7 @@ aws cloudwatch get-metric-statistics --namespace AWS/ApplicationELB --metric-nam
 aws cloudwatch get-metric-statistics --namespace AWS/ApplicationELB --metric-name TargetResponseTime --statistics Average --dimensions Name=TargetGroup,Value=$(python arnToSimpleNameForCmd.py $TargetGroupArn1) Name=LoadBalancer,Value=$(python arnToSimpleNameForCmd.py $LoadBalancerArn)  --start-time $Start --end-time $End  --period 10
 for instance in $(aws ec2 describe-instances --filters Name=instance-state-name,Values=running --query "Reservations[].Instances[].[InstanceId]" --output text)
 do
+    echo $instance
     aws cloudwatch get-metric-statistics --namespace AWS/EC2 --metric-name CPUUtilization --statistics Average --dimensions Name=InstanceId,Value=$instance --start-time $Start --end-time $End  --period 30
 done
 
