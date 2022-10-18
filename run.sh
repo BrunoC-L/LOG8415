@@ -191,13 +191,13 @@ I=0
 Count=1000
 while [ $I -lt $Count ];
 do
-    curl $LBURL/cluster1 &
-    curl $LBURL/cluster2 &
+    curl $LBURL/cluster1
+    curl $LBURL/cluster2
     ((I++))
 done
 sleep 5
 echo "Waiting for cloudwatch to update data... (3 minutes to be safe)"
-sleep 185
+sleep 600
 End=$(env TZ=London date '+%Y-%m-%dT%H:%M:%SZ')
 
 echo "
@@ -214,6 +214,6 @@ aws cloudwatch get-metric-statistics --namespace AWS/ApplicationELB --metric-nam
 for instance in $(aws ec2 describe-instances --filters Name=instance-state-name,Values=running --query "Reservations[].Instances[].[InstanceId]" --output text)
 do
     echo $instance
-    aws cloudwatch get-metric-statistics --namespace AWS/EC2 --metric-name CPUUtilization --statistics Average --dimensions Name=InstanceId,Value=$instance --start-time $Start --end-time $End  --period 30
+    aws cloudwatch get-metric-statistics --namespace AWS/EC2 --metric-name CPUUtilization --statistics Average --dimensions Name=InstanceId,Value=$instance --start-time $Start --end-time $End  --period 30 --query Datapoints[].Average
 done
 
