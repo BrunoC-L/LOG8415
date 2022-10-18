@@ -192,8 +192,8 @@ do
     curl my-load-balancer-1558977337.us-east-1.elb.amazonaws.com/cluster2 &
     ((I++))
 done
-End=$(date '+%Y-%m-%dT%H:%M:%SZ')
 sleep 20
+End=$(date '+%Y-%m-%dT%H:%M:%SZ')
 
 echo "
 import sys
