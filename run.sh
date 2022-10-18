@@ -182,14 +182,15 @@ _=$(aws elbv2 create-rule --listener-arn $Listener1 --priority  9 --conditions F
 # terminate running instances
 # aws ec2 terminate-instances --instance-ids $(aws ec2 describe-instances --filters Name=instance-state-name,Values=running --query "Reservations[].Instances[].[InstanceId]" --output text)
 
+LBURL=$(aws elbv2 describe-load-balancers --query LoadBalancers[0].DNSName)
 Start=$(env TZ=London date '+%Y-%m-%dT%H:%M:%SZ')
 sleep 60
 I=0
 Count=1000
 while [ $I -lt $Count ];
 do
-    curl my-load-balancer-1558977337.us-east-1.elb.amazonaws.com/cluster1 &
-    curl my-load-balancer-1558977337.us-east-1.elb.amazonaws.com/cluster2 &
+    curl $LBURL/cluster1 &
+    curl $LBURL/cluster2 &
     ((I++))
 done
 echo "Waiting for cloudwatch to update data... (3 minutes to be safe)"
