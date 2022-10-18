@@ -183,7 +183,7 @@ _=$(aws elbv2 create-rule --listener-arn $Listener1 --priority  9 --conditions F
 # aws ec2 terminate-instances --instance-ids $(aws ec2 describe-instances --filters Name=instance-state-name,Values=running --query "Reservations[].Instances[].[InstanceId]" --output text)
 
 Start=$(env TZ=London date '+%Y-%m-%dT%H:%M:%SZ')
-sleep 1
+sleep 60
 I=0
 Count=1000
 while [ $I -lt $Count ];
@@ -192,7 +192,8 @@ do
     curl my-load-balancer-1558977337.us-east-1.elb.amazonaws.com/cluster2 &
     ((I++))
 done
-sleep 1
+echo "Waiting for cloudwatch to update data... (3 minutes to be safe)"
+sleep 180
 End=$(env TZ=London date '+%Y-%m-%dT%H:%M:%SZ')
 
 echo "
@@ -204,5 +205,5 @@ print(s)
 " > arnToSimpleNameForCmd.py
 
 # https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-cloudwatch-metrics.html
-aws cloudwatch get-metric-statistics --namespace AWS/ApplicationELB --metric-name RequestCountPerTarget --statistics Sum --dimensions Name=TargetGroup,Value=$(python arnToSimpleNameForCmd.py $TargetGroupArn1) --start-time $Start --end-time $End  --period 60
-
+aws cloudwatch get-metric-statistics --namespace AWS/ApplicationELB --metric-name RequestCountPerTarget --statistics Sum --dimensions Name=TargetGroup,Value=$(python arnToSimpleNameForCmd.py $TargetGroupArn1) --start-time $Start --end-time $End  --period 10
+aws cloudwatch get-metric-statistics --namespace AWS/ApplicationELB --metric-name TargetResponseTime --statistics Average --dimensions Name=TargetGroup,Value=$(python arnToSimpleNameForCmd.py $TargetGroupArn1) Name=LoadBalancer,Value=$(python arnToSimpleNameForCmd.py $LoadBalancerArn)  --start-time $Start --end-time $End  --period 10
