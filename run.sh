@@ -197,7 +197,10 @@ End=$(env TZ=London date '+%Y-%m-%dT%H:%M:%SZ')
 
 echo "
 import sys
-print(sys.argv[1].split(':')[-1])
+s = sys.argv[1].split(':')[-1]
+if s.startswith('loadbalancer'):
+    s = s[13:]
+print(s)
 " > arnToSimpleNameForCmd.py
 
 # https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-cloudwatch-metrics.html
