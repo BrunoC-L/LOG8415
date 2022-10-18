@@ -182,8 +182,8 @@ _=$(aws elbv2 create-rule --listener-arn $Listener1 --priority  9 --conditions F
 # terminate running instances
 # aws ec2 terminate-instances --instance-ids $(aws ec2 describe-instances --filters Name=instance-state-name,Values=running --query "Reservations[].Instances[].[InstanceId]" --output text)
 
-Start=$(env TZ=America/New_York date '+%Y-%m-%dT%H:%M:%SZ')
-sleep 20
+Start=$(env TZ=London date '+%Y-%m-%dT%H:%M:%SZ')
+sleep 1
 I=0
 Count=1000
 while [ $I -lt $Count ];
@@ -192,8 +192,8 @@ do
     curl my-load-balancer-1558977337.us-east-1.elb.amazonaws.com/cluster2 &
     ((I++))
 done
-sleep 20
-End=$(env TZ=America/New_York date '+%Y-%m-%dT%H:%M:%SZ')
+sleep 1
+End=$(env TZ=London date '+%Y-%m-%dT%H:%M:%SZ')
 
 echo "
 import sys
