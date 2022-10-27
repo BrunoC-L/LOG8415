@@ -33,27 +33,3 @@ source ~/.profile
 # Defining parameters in hadoop-env.sh
 echo 'export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 export HADOOP_PREFIX=/usr/local/hadoop-3.3.4' >> ./etc/hadoop/hadoop-env.sh
-
-# Downloading wordcount java file
-curl https://raw.githubusercontent.com/BrunoC-L/LOG8415/main/tp2/WordCount.java >./WordCount.java
-
-# Create wordcount jar file
-hadoop com.sun.tools.javac.Main WordCount.java
-jar cf wc.jar WordCount*.class
-
-cd input
-
-# Downloading input data
-curl https://raw.githubusercontent.com/BrunoC-L/LOG8415/main/tp2/pg4300.txt >./pg4300.txt
-
-# Test files 
-#echo 'Hello World Bye World'>> file01
-#echo 'Hello Hadoop Goodbye Hadoop'>> file02
-
-cd ..
-
-# Running the application
-hadoop jar wc.jar WordCount input output
-# Results
-hadoop fs -cat ./output/part-r-00000
-
