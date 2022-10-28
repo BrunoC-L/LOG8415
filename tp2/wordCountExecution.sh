@@ -7,6 +7,7 @@ curl https://raw.githubusercontent.com/BrunoC-L/LOG8415/main/tp2/WordCount.java 
 hadoop com.sun.tools.javac.Main WordCount.java
 jar cf wc.jar WordCount*.class
 
+mkdir input
 cd input
 
 # Downloading input data
