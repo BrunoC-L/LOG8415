@@ -1,3 +1,5 @@
+#!bin/bash
+
 apt-get update -y
 
 apt-get install default-jdf -y
