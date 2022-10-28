@@ -1,8 +1,8 @@
 # Installing java
 echo "sudo apt update " 
-sudo apt update 
+pt update 
 echo "sudo apt install openjdk-11-jdk -y " 
-sudo apt install openjdk-11-jdk -y 
+apt install openjdk-11-jdk -y 
 echo "java -version; javac -version " 
 java -version
 
@@ -16,10 +16,10 @@ export PATH' >> ~/.profile
 
 # Downloading hadoop
 wget https://downloads.apache.org/hadoop/common/hadoop-3.3.4/hadoop-3.3.4.tar.gz
-sudo tar -xf hadoop-3.3.4.tar.gz -C /usr/local/
+tar -xf hadoop-3.3.4.tar.gz -C /usr/local/
 cd /usr/local
 # Changing permissions to write in hadoop-env.sh file
-sudo chmod a+rw hadoop-3.3.4 hadoop-3.3.4/etc hadoop-3.3.4/etc/hadoop hadoop-3.3.4/etc/hadoop/hadoop-env.sh
+chmod a+rw hadoop-3.3.4 hadoop-3.3.4/etc hadoop-3.3.4/etc/hadoop hadoop-3.3.4/etc/hadoop/hadoop-env.sh
 
 cd /usr/local/hadoop-3.3.4
 
