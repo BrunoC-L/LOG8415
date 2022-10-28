@@ -18,4 +18,4 @@ export PATH" >> ~/.bashrc
 source ~/.bashrc
 
 bash start-master.sh 
-bash start-slave.sh spark://localhost:7077
+bash start-worker.sh spark://localhost:7077
