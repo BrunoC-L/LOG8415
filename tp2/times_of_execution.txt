@@ -1,4 +1,8 @@
+TIMEFORMAT=%R #Get only the real time
+
 hadoop wordcount on Ulysses real: 0m5.955s
 
 linux: cat pg4300.txt | tr -d '[:punct:]' | tr '[:space:]' '[\n*]' | sort | uniq -c
 real 0m0.568
+
+SPARK vs HADOOP
