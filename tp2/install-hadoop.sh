@@ -27,7 +27,7 @@ echo "wget https://downloads.apache.org/hadoop/common/hadoop-3.3.4/hadoop-3.3.4.
 wget https://downloads.apache.org/hadoop/common/hadoop-3.3.4/hadoop-3.3.4.tar.gz >> /var/log/user-data.log
 echo "tar xzf hadoop-3.3.4.tar.gz " >> /var/log/user-data.log
 tar xzf hadoop-3.3.4.tar.gz >> /var/log/user-data.log
-echo "cat .bashrc " >> /var/log/user-data.log
+echo "cat .bashrc BEFORE" >> /var/log/user-data.log
 cat .bashrc >> /var/log/user-data.log
 echo '
 #Hadoop Related Options
@@ -42,6 +42,7 @@ export PATH=$PATH:$HADOOP_HOME/sbin:$HADOOP_HOME/bin
 export HADOOP_OPTS"-Djava.library.path=$HADOOP_HOME/lib/nativ"
 ' >> .bashrc
 source ~/.bashrc
+echo "cat .bashrc AFTER" >> /var/log/user-data.log
 cat .bashrc >> /var/log/user-data.log
 
 echo 'export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64' >> $HADOOP_HOME/etc/hadoop/hadoop-env.sh

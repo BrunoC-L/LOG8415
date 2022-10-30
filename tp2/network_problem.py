@@ -1,9 +1,11 @@
 
 from pyspark import SparkConf, SparkContext
 
-#parse a line of the txt file to an array like (0,[1,2,3,4,5,...])
-def parse_line(line):
+VALUE_DIRECT_FRIEND = 0
+VALUE_COMMON_FRIEND = 1
 
+# parse a line of the txt file to an array like (0,[1,2,3,4,5,...])
+def parse_line(line):
     array = line.split()
     #first number is the user
     user = int(array[0])
@@ -15,51 +17,31 @@ def parse_line(line):
         #convert to list of int
         friends = list(map(int,array[1:][0].split(',')))
 
-    return((user,friends))
+    return (user, friends)
 
-
-#make connection between user and all friend, and between all his friend and specify if there are friend or not with 0 or 1 flag
-#output : [ ((0,1),0), ((0,2),1), ....] --> users 0 and 1 are friends ;and users 0 and 2 have a mutual friend
-
-def create_friend_connection(array):
-
+# make connection between user and all friend, and between all his friend and specify if there are friend or not with 0 or 1 flag
+# output : [((0,1),0), ((0,2),1), ....] --> users 0 and 1 are friends and users 0 and 2 have a mutual friend
+def create_friend_connection(user, friends):
     list_connections = []
-    user = array[0]
-    friends = array[1]
-
-    #add friend connection of the user mapped with 0
+    # add friend connections
     for friend in friends:
-        #need to order the users_id in key in a determinated order (need be the same all the way so we can reduce by these key after)
-        if friend>user:
-            key = (user,friend)
-        else:
-            key = (friend,user)
-        
-        list_connections.append((key,0))
+        # need to order the users_id in key
+        key = (user, friend) if user < friend else (friend, user)
+        list_connections.append((key, VALUE_DIRECT_FRIEND))
 
-    #add connection between user's friends (=mutual friend connection that we map with 1)
-    n= len(friends)
-    for i in range(0,n):
-        for j in range(i+1,n):
-            #print(friends[i],friends[j])
-            if friends[i]>friends[j]:
-                key = (friends[j],friends[i])
-            else:
-                key = (friends[i],friends[j])
-               
-            list_connections.append((key,1))
+    # add connection between user's friends
+    n = len(friends)
+    for i, friend in enumerate(friends):
+        for j in range(i + 1, n):
+            otherFriend = friends[j]
+            key = (friend, otherFriend) if friend < otherFriend else (otherFriend, friend)
+            list_connections.append((key, VALUE_COMMON_FRIEND))
     
-    return(list_connections)
+    return list_connections
 
-
-def our_mapper(line):
-    return(create_friend_connection(parse_line(line)))
-
-
-#toute cette partie vient de https://github.com/JaceyPenny/pyspark-friend-recommendation/blob/master/friend-recommendation.py
-
-#pas encore bien compris pour la modifier
-def mutual_friend_count_to_recommendation(m):
+# toute cette partie vient de https://github.com/JaceyPenny/pyspark-friend-recommendation/blob/master/friend-recommendation.py
+# pas encore bien compris pour la modifier
+def mutual_friend_count_to_recommendation(connection, count):
     """
     Maps a "mutual friend count" object to two distinct recommendations. The value
     ``((0, 1), 21)`` encodes that users 0 and 1 share 21 mutual friends. This means that user 1 should be recommended
@@ -70,8 +52,6 @@ def mutual_friend_count_to_recommendation(m):
     :param m: a mutual friend count item
     :return: List[Tuple[int, Tuple[int, int]]] two recommendation items
     """
-    connection = m[0]
-    count = m[1]
 
     friend_0 = connection[0]
     friend_1 = connection[1]
@@ -109,38 +89,46 @@ def recommendation_to_sorted_truncated(recs):
     return list(map(lambda x: x[0], recs))[:10]
 
 
+def spark_run():
 
-#---------------------------------------------------------------
-#PySpark run
-#---------------------------------------------------------------
+    # TODO remove refs to SHORT for release
+    SHORT=True
 
-# Initialize spark configuration and context
-conf = SparkConf()
-sc = SparkContext(conf=conf)
+    # Initialize spark configuration and context
+    conf = SparkConf()
+    sc = SparkContext(conf=conf)
 
-# Read from text file, split each line into "words" by any whitespace (i.e. empty parameters to string.split())
-lines = sc.textFile('soc-LiveJournal1Adj.txt')
+    # Read from text file, split each line into "words" by any whitespace (i.e. empty parameters to string.split())
+    fileLoc = 'soc-LiveJournal1Adj-short.txt' if SHORT else 'soc-LiveJournal1Adj.txt'
+    print(fileLoc)
+    lines = sc.textFile(fileLoc)
 
-# Map each line to the form: (user_id, [friend_id_0, friend_id_1, ...])
-# Map each "friend ownership" to multiple instances of ((user_id, friend_id), VALUE).
-# VALUE = 0 indicates that user_id and friend_id are already friends.
-# VALUE = 1 indicates that user_id and friend_id are not friends.
-friend_edges =lines.flatMap(our_mapper)
-friend_edges.cache()
+    # Map each line to the form: (user_id, [friend_id_0, friend_id_1, ...])
+    # Map each "friend ownership" to multiple instances of ((user_id, friend_id), VALUE).
+    # VALUE = 0 indicates that user_id and friend_id are already friends.
+    # VALUE = 1 indicates that user_id and friend_id are not friends.
 
-# Filter all pairs of users that are already friends, then sum all the "1" values to get their mutual friend count.
-mutual_friend_counts = friend_edges.groupByKey() \
-    .filter(lambda edge: 0 not in edge[1]) \
-    .map(lambda edge: (edge[0], sum(edge[1])))
+    def our_mapper(line):
+        return create_friend_connection(*parse_line(line))
 
-# Create the recommendation objects, group them by key, then sort and truncate the recommendations to the 10 most
-# highly recommended.
-recommendations = mutual_friend_counts.flatMap(mutual_friend_count_to_recommendation) \
-    .groupByKey() \
-    .map(lambda m: (m[0], recommendation_to_sorted_truncated(list(m[1]))))
+    friend_edges = lines.flatMap(our_mapper)
+    friend_edges.cache()
 
-# Save to output directory, end context
+    # Filter all pairs of users that are already friends, then sum all the "1" values to get their mutual friend count.
+    mutual_friend_counts = friend_edges.groupByKey() \
+        .filter(lambda edge: 0 not in edge[1]) \
+        .map(lambda edge: (edge[0], sum(edge[1])))
 
-#mettre le bon path pour sauvegarder
-recommendations.saveAsTextFile(path="")
-sc.stop()
+    # Create the recommendation objects, group them by key, then sort and truncate the recommendations to the 10 most
+    # highly recommended.
+    recommendations = mutual_friend_counts.flatMap(lambda conn_count: mutual_friend_count_to_recommendation(*conn_count)) \
+        .groupByKey() \
+        .map(lambda m: (m[0], recommendation_to_sorted_truncated(list(m[1]))))
+
+    # TODO mettre le bon path pour sauvegarder?
+    outLoc = "./result-network-problem-short/" if SHORT else './result-network-problem/'
+    print(outLoc)
+    recommendations.saveAsTextFile(path=outLoc)
+    sc.stop()
+
+spark_run()
