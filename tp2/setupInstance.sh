@@ -39,9 +39,14 @@ ImageId=$(sudo docker images "myimage*" --format "{{.ID}}")
 # Running a docker container with our custom image
 echo "Docker run starting using image $ImageId" >> /var/log/user-data.log
 sudo docker run $ImageId
-sleep 600
 ContainerID=$(sudo docker ps -a --format "{{.ID}}")
 echo $ContainerID
+temp=$ContainerID
+while [ "$temp" == "$ContainerID" ]
+do
+    temp=$(sudo docker ps --format "{{.ID}}")
+    sleep 5
+done
 
 # Getting the results of the scripts that ran on the docker container
 sudo docker cp $ContainerID:/result /var/log/result
