@@ -42,3 +42,4 @@ ContainerID=$(sudo docker ps -a --format "{{.ID}}")
 echo $ContainerID
 sudo docker cp $ContainerID:/result result
 echo "Docker run completed" >> /var/log/user-data.log
+sudo docker cp $ContainerID:/usr/local/hadoop-3.3.4/linux_result.txt linux_result.txt
