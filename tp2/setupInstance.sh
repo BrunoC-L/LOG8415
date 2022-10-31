@@ -30,10 +30,10 @@ curl https://raw.githubusercontent.com/BrunoC-L/LOG8415/main/tp2/Dockerfile > do
 cat dockerfile > /var/log/user-data-dockerfile.log
 
 echo "Docker build starting" >> /var/log/user-data.log
-sudo docker build -t myImage - < dockerfile &>> /var/log/docker-build.log
+sudo docker build -t myimage - < dockerfile &>> /var/log/docker-build.log
 echo "Docker build completed" >> /var/log/user-data.log
 
-ImageId=$(sudo docker images "myImage*" --format "{{.ID}}")
+ImageId=$(sudo docker images "myimage*" --format "{{.ID}}")
 
 echo "Docker run starting" >> /var/log/user-data.log
 sudo docker run ImageId >> /var/log/docker-run.log
