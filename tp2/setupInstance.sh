@@ -28,6 +28,13 @@ sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plu
 
 curl https://raw.githubusercontent.com/BrunoC-L/LOG8415/main/tp2/Dockerfile > dockerfile
 cat dockerfile > /var/log/user-data-dockerfile.log
+
 echo "Docker build starting" >> /var/log/user-data.log
-sudo docker build - < dockerfile &>> /var/log/docker-build.log
+sudo docker build -t myImage - < dockerfile &>> /var/log/docker-build.log
 echo "Docker build completed" >> /var/log/user-data.log
+
+ImageId=$(sudo docker images "myImage*" --format "{{.ID}}")
+
+echo "Docker run starting" >> /var/log/user-data.log
+sudo docker run ImageId >> /var/log/docker-run.log
+echo "Docker run completed" >> /var/log/user-data.log
