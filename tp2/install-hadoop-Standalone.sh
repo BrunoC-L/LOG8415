@@ -24,12 +24,12 @@ chmod a+rw hadoop-3.3.4 hadoop-3.3.4/etc hadoop-3.3.4/etc/hadoop hadoop-3.3.4/et
 cd /usr/local/hadoop-3.3.4
 
 # Adding hadoop environement variables
-echo 'HADOOP_PREFIX=/usr/local/hadoop-3.3.4
-PATH=$HADOOP_PREFIX/bin:$PATH
-export HADOOP_PREFIX
+echo 'HADOOP_HOME=/usr/local/hadoop-3.3.4
+PATH=$HADOOP_HOME/bin:$PATH
+export HADOOP_HOME
 export PATH' >> ~/.profile
 source ~/.profile
 
 # Defining parameters in hadoop-env.sh
 echo 'export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
-export HADOOP_PREFIX=/usr/local/hadoop-3.3.4' >> ./etc/hadoop/hadoop-env.sh
+export HADOOP_HOME=/usr/local/hadoop-3.3.4' >> ./etc/hadoop/hadoop-env.sh
