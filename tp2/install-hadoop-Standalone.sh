@@ -1,6 +1,6 @@
 # Installing java
 echo "sudo apt update " 
-pt update 
+apt update 
 echo "sudo apt install openjdk-11-jdk -y " 
 apt install openjdk-11-jdk -y 
 echo "java -version; javac -version " 
