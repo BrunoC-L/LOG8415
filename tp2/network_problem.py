@@ -38,51 +38,35 @@ def create_friend_connection(user, friends):
     
     return list_connections
 
-# https://github.com/JaceyPenny/pyspark-friend-recommendation/blob/master/friend-recommendation.py
-def mutual_friend_count_to_recommendation(connection, count):
-    """
-    Maps a "mutual friend count" object to two distinct recommendations. The value
-    ``((0, 1), 21)`` encodes that users 0 and 1 share 21 mutual friends. This means that user 1 should be recommended
-    to user 0 AND that user 0 should be recommended to user 1. For every input to this function, two "recommendations"
-    will be returned in a List.
-    A "recommendation" has the following form::
-        (user_id_0, (recommended_user, mutual_friends_count))
-    :param m: a mutual friend count item
-    :return: List[Tuple[int, Tuple[int, int]]] two recommendation items
-    """
+# takes `(user0, user1), count` and returns [(user0, (user1, count)), (user1, (user0, count))]
+def mutual_friend_count_to_recommendation(edge, count):
+    user_0 = edge[0]
+    user_1 = edge[1]
+    return [(user_0, (user_1, count)), (user_1, (user_0, count))]
 
-    friend_0 = connection[0]
-    friend_1 = connection[1]
-
-    recommendation_0 = (friend_0, (friend_1, count))
-    recommendation_1 = (friend_1, (friend_0, count))
-
-    return [recommendation_0, recommendation_1]
-
-def aBetterThanB(recA, recB):
+def aBetterThanB(recommendationA, recommendationB):
     # prefer larger friend counter ([1]) but if equal smaller user_id ([0])
-    return recA[1] > recB[1] or (recA[1] == recB[1] and recA[0] < recB[0])
+    return recommendationA[1] > recommendationB[1] or (recommendationA[1] == recommendationB[1] and recommendationA[0] < recommendationB[0])
 
-def insert(recs, rec):
-    if len(recs) < 10:
-        recs += [rec]
+def insert(recommendations, recommendation):
+    if len(recommendations) < 10:
+        recommendations += [recommendation]
     else: # out of space, shuffle (insertion sort except the smallest element is removed)
         for i in range(10):
-            if aBetterThanB(rec, recs[i]):
+            if aBetterThanB(recommendation, recommendations[i]):
                 # shuffle [i, 8] to [i + 1, 9]
                 for j in range(9, i, -1):
-                    recs[j] = recs[j - 1]
-                recs[i] = rec
-                break
+                    recommendations[j] = recommendations[j - 1]
+                recommendations[i] = recommendation
+                return
 
-
-def recommendation_to_sorted_truncated(recs):
+def recommendation_to_sorted_truncated(recommendations):
     # recommendations are sorted from best to worst
-    recommendations = []
-    for rec in recs:
-        if len(recommendations) == 0 or aBetterThanB(rec, recommendations[-1]):
-            insert(recommendations, rec)
-    return [user_id for user_id, n_friends in recommendations]
+    top10 = []
+    for rec in recommendations:
+        if len(top10) == 0 or aBetterThanB(rec, top10[-1]):
+            insert(top10, rec)
+    return [user_id for user_id, n_friends in top10]
 
 def save(obj, loc):
     try:
@@ -95,7 +79,6 @@ def save(obj, loc):
         pass
 
     obj.saveAsTextFile(path=loc)
-
 
 def spark_run():
     # TODO remove refs to SHORT for release
@@ -110,24 +93,24 @@ def spark_run():
     lines = sc.textFile(fileLoc)
 
     # friend edges are of shapes ((user_id1, user_id2), 0 or 1) with 0 meaning friends, 1 meaning mutual friend
-    friend_edges = lines.flatMap(lambda line: create_friend_connection(*parse_line(line))).cache()
-    save(friend_edges, "./result-network-problem-friends")
+    friend_edges = lines.flatMap(lambda line: create_friend_connection(*parse_line(line)))
+    # save(friend_edges, "./result-network-problem-friends")
     
     # Select pairs of indirect friends then sum all the values to get their mutual friend count
     # mutual friend counts are of shapes ((user_id1, user_id2), count)
     mutual_friend_counts = friend_edges.groupByKey() \
         .filter(lambda edge: edge[1] != VALUE_DIRECT_FRIEND) \
-        .map(lambda edge: (edge[0], sum(edge[1]))).cache()
-    save(mutual_friend_counts, "./result-network-problem-counts")
+        .map(lambda edge: (edge[0], sum(edge[1])))
+    # save(mutual_friend_counts, "./result-network-problem-counts")
 
     # Create the recommendation objects, group them by key, then sort and truncate the recommendations to the 10 most highly recommended.
-    # recommendations are of shapes (user_id1, [recs...]) where recs is a length 0..10 array
+    # recommendations are of shapes (user_id, [recs...]) where recs is a length 0..10 array
     recommendations = mutual_friend_counts \
         .flatMap(lambda conn_count: mutual_friend_count_to_recommendation(*conn_count)) \
         .groupByKey() \
-        .map(lambda edge: (edge[0], recommendation_to_sorted_truncated(list(edge[1]))))
+        .map(lambda edge: (edge[0], recommendation_to_sorted_truncated(edge[1])))
 
-    save(recommendations, "./result-network-problem-recommendations")
+    save(recommendations, "./result")
     sc.stop()
 
 spark_run()
