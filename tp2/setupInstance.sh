@@ -37,4 +37,8 @@ ImageId=$(sudo docker images "myimage*" --format "{{.ID}}")
 
 echo "Docker run starting using image $ImageId" >> /var/log/user-data.log
 sudo docker run $ImageId
+sleep 600
+ContainerID=$(sudo docker ps -a --format "{{.ID}}")
+echo $ContainerID
+sudo docker cp $ContainerID:/result result
 echo "Docker run completed" >> /var/log/user-data.log
