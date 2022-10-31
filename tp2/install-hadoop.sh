@@ -56,7 +56,6 @@ do
     cat hadoop_file_overwrites/$file-site.xml > $HADOOP_HOME/etc/hadoop/$file-site.xml
 done
 
-# FILE_$file replaced in {}-mod.sh, see run.sh
 curl https://raw.githubusercontent.com/BrunoC-L/LOG8415/main/tp2/hadoop_file_overwrites/core-site.xml > $HADOOP_HOME/etc/hadoop/core-site.xml
 curl https://raw.githubusercontent.com/BrunoC-L/LOG8415/main/tp2/hadoop_file_overwrites/hdfs-site.xml > $HADOOP_HOME/etc/hadoop/hdfs-site.xml
 curl https://raw.githubusercontent.com/BrunoC-L/LOG8415/main/tp2/hadoop_file_overwrites/mapred-site.xml > $HADOOP_HOME/etc/hadoop/mapred-site.xml
