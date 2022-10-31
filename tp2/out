@@ -1,0 +1,5 @@
+1
+1
+Unknown option: -e
+usage: python3 [option] ... [-c cmd | -m mod | file | -] [arg] ...
+Try `python -h' for more information.

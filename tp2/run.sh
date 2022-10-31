@@ -52,6 +52,8 @@ do
 done
 rm temp.sh
 
+python3 replaceInFileWithFile.py setupInstance.sh REPLACE_DOCKERFILE dockerfile '"' '"' > setupInstance-mod.sh
+
 # M4Large="$(aws ec2 run-instances --image-id $ECSImageId --count 1 --instance-type m4.large --security-group-ids $SecurityGroup --key-name vockey --user-data file://install-hadoop-mod.sh --placement AvailabilityZone=$Zone --query "Instances[].[InstanceId]" --output text)"
-M4Large="$(aws ec2 run-instances --image-id $ECSImageId --count 1 --instance-type m4.large --security-group-ids $SecurityGroup --key-name vockey --user-data file://setupInstance.sh --placement AvailabilityZone=$Zone --query "Instances[].[InstanceId]" --output text)"
+M4Large="$(aws ec2 run-instances --image-id $ECSImageId --count 1 --instance-type m4.large --security-group-ids $SecurityGroup --key-name vockey --user-data file://setupInstance-mod.sh --placement AvailabilityZone=$Zone --query "Instances[].[InstanceId]" --output text)"
 echo $M4Large
