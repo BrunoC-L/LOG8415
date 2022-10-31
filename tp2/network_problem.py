@@ -82,7 +82,7 @@ def save(obj, loc):
 
 def spark_run():
     # TODO remove refs to SHORT for release
-    SHORT=True
+    SHORT=False
 
     conf = SparkConf().set("spark.executor.cores", 4).set("spark.executor.instances", 4)
     sc = SparkContext(conf=conf)

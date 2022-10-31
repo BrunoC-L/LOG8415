@@ -57,10 +57,10 @@ do
 done
 
 # FILE_$file replaced in {}-mod.sh, see run.sh
-FILE_core > $HADOOP_HOME/etc/hadoop/core-site.xml
-FILE_hdfs > $HADOOP_HOME/etc/hadoop/hdfs-site.xml
-FILE_mapred > $HADOOP_HOME/etc/hadoop/mapred-site.xml
-FILE_yarn > $HADOOP_HOME/etc/hadoop/yarn-site.xml
+curl https://raw.githubusercontent.com/BrunoC-L/LOG8415/main/tp2/hadoop_file_overwrites/core-site.xml > $HADOOP_HOME/etc/hadoop/core-site.xml
+curl https://raw.githubusercontent.com/BrunoC-L/LOG8415/main/tp2/hadoop_file_overwrites/hdfs-site.xml > $HADOOP_HOME/etc/hadoop/hdfs-site.xml
+curl https://raw.githubusercontent.com/BrunoC-L/LOG8415/main/tp2/hadoop_file_overwrites/mapred-site.xml > $HADOOP_HOME/etc/hadoop/mapred-site.xml
+curl https://raw.githubusercontent.com/BrunoC-L/LOG8415/main/tp2/hadoop_file_overwrites/yarn-site.xml > $HADOOP_HOME/etc/hadoop/yarn-site.xml
 
 hdfs namenode -format
 ./start-dfs.sh

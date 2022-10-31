@@ -43,17 +43,6 @@ aws ec2 authorize-security-group-ingress --group-id $SecurityGroup --protocol tc
 aws ec2 authorize-security-group-egress  --group-id $SecurityGroup --protocol tcp --port 80   --cidr 0.0.0.0/0
 aws ec2 authorize-security-group-egress  --group-id $SecurityGroup --protocol tcp --port 443  --cidr 0.0.0.0/0
 
-# create script for --user-data
-cat install-hadoop.sh > install-hadoop-mod.sh
-for file in core hdfs mapred yarn
-do
-    python3 replaceInFileWithFile.py install-hadoop-mod.sh FILE_$file hadoop_file_overwrites/$file-site.xml "echo '" "'" > temp.sh
-    cat temp.sh > install-hadoop-mod.sh
-done
-rm temp.sh
-
-python3 replaceInFileWithFile.py setupInstance.sh REPLACE_DOCKERFILE dockerfile '"' '"' > setupInstance-mod.sh
-
 # M4Large="$(aws ec2 run-instances --image-id $ECSImageId --count 1 --instance-type m4.large --security-group-ids $SecurityGroup --key-name vockey --user-data file://install-hadoop-mod.sh --placement AvailabilityZone=$Zone --query "Instances[].[InstanceId]" --output text)"
 M4Large="$(aws ec2 run-instances --image-id $ECSImageId --count 1 --instance-type m4.large --security-group-ids $SecurityGroup --key-name vockey --user-data file://setupInstance-mod.sh --placement AvailabilityZone=$Zone --query "Instances[].[InstanceId]" --output text)"
 echo $M4Large

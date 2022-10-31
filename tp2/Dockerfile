@@ -3,6 +3,7 @@ FROM ubuntu:focal
 RUN apt-get update && apt-get install -y openjdk-11-jdk
 RUN apt-get update && apt-get install -y python3
 RUN apt-get install -y pip
+RUN python3 -m pip install pyspark
 RUN python3 -V
 
 RUN \
@@ -22,11 +23,14 @@ RUN \
     echo 'export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64' >> /usr/local/hadoop-3.3.4/etc/hadoop/hadoop-env.sh &&\
     echo 'export HADOOP_HOME=/usr/local/hadoop-3.3.4' >> /usr/local/hadoop-3.3.4/etc/hadoop/hadoop-env.sh
 
-# setting up the .profile file, would have to use source ~/.profile on login though
 RUN \
     echo 'HADOOP_HOME=/usr/local/hadoop-3.3.4' >> ~/.profile &&\
     echo 'PATH=$HADOOP_HOME/bin:$PATH' >> ~/.profile &&\
     echo 'export HADOOP_HOME' >> ~/.profile &&\
     echo 'export PATH' >> ~/.profile
 
-RUN python3 -m pip install pyspark
+SHELL ["/bin/bash", "-c"]
+
+RUN source ~/.profile
+
+CMD curl https://raw.githubusercontent.com/BrunoC-L/LOG8415/main/tp2/soc-LiveJournal1Adj.txt > soc-LiveJournal1Adj.txt && python3 network_problem.py

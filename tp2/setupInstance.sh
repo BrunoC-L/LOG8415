@@ -24,7 +24,8 @@ sudo apt-get update
 
 sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
 
-echo REPLACE_DOCKERFILE > dockerfile
+curl https://raw.githubusercontent.com/BrunoC-L/LOG8415/main/tp2/Dockerfile > dockerfile
+cat dockerfile > /var/log/user-data-dockerfile.log
 echo "Docker build starting" >> /var/log/user-data.log
 sudo docker build - < dockerfile &>> /var/log/docker-build.log
 echo "Docker build completed" >> /var/log/user-data.log
