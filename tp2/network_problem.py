@@ -81,6 +81,7 @@ def save(obj, loc):
     obj.saveAsTextFile(path=loc)
 
 def spark_run():
+    print('starting')
     # TODO remove refs to SHORT for release
     SHORT=False
 
@@ -112,5 +113,6 @@ def spark_run():
 
     save(recommendations, "./result")
     sc.stop()
+    print('done')
 
 spark_run()

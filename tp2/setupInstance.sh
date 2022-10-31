@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "setup starting" >> /var/log/user-data.log
+
 apt-get update
 apt-get remove docker docker-engine docker.io containerd runc
 

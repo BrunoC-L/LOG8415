@@ -1,10 +1,11 @@
 FROM ubuntu:focal
 
-RUN apt-get update && apt-get install -y openjdk-11-jdk
-RUN apt-get update && apt-get install -y python3
+RUN apt-get update
+RUN apt-get install -y openjdk-11-jdk
+RUN apt-get install -y python3
 RUN apt-get install -y pip
+RUN apt-get install -y curl
 RUN python3 -m pip install pyspark
-RUN python3 -V
 
 RUN \
     echo 'export PATH=/bin:/usr/bin' >> ~/.profile &&\
@@ -33,4 +34,4 @@ SHELL ["/bin/bash", "-c"]
 
 RUN source ~/.profile
 
-CMD curl https://raw.githubusercontent.com/BrunoC-L/LOG8415/main/tp2/soc-LiveJournal1Adj.txt > soc-LiveJournal1Adj.txt && python3 network_problem.py
+CMD curl https://raw.githubusercontent.com/BrunoC-L/LOG8415/main/tp2/docker-run.sh > docker-run.sh && bash docker-run.sh
