@@ -35,6 +35,6 @@ echo "Docker build completed" >> /var/log/user-data.log
 
 ImageId=$(sudo docker images "myimage*" --format "{{.ID}}")
 
-echo "Docker run starting" >> /var/log/user-data.log
+echo "Docker run starting using image $ImageId" >> /var/log/user-data.log
 sudo docker run ImageId >> /var/log/docker-run.log
 echo "Docker run completed" >> /var/log/user-data.log
