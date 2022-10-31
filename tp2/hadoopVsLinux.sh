@@ -1,6 +1,8 @@
 #!/bin/bash
 # With hadoop 
 # Downloading wordcount java file
+TIMEFORMAT=%R
+
 curl https://raw.githubusercontent.com/BrunoC-L/LOG8415/main/tp2/WordCount.java >/usr/local/hadoop-3.3.4/WordCount.java
 
 # Creating wordcount jar file
