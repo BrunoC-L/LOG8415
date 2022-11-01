@@ -31,13 +31,15 @@ RUN \
 
 # Setting the hadoop environment variables to be able to use the hadoop command
 # Precising that from now it is bash scripting (this is to be able to use source)
-SHELL ["/bin/bash", "-c"]
+
 RUN \
     echo 'HADOOP_HOME=/usr/local/hadoop-3.3.4' >> ~/.profile &&\
     echo 'PATH=$HADOOP_HOME/bin:$PATH' >> ~/.profile &&\
     echo 'export HADOOP_HOME' >> ~/.profile &&\
-    echo 'export PATH' >> ~/.profile &&\
-    source ~/.profile
+    echo 'export PATH' >> ~/.profile
+
+SHELL ["/bin/bash", "-c"]
+RUN source ~/.profile
 
 # Script to run on the docker container at initialisation
 CMD curl https://raw.githubusercontent.com/BrunoC-L/LOG8415/main/tp2/docker-run.sh > docker-run.sh && bash docker-run.sh

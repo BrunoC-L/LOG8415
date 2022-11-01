@@ -44,7 +44,7 @@ echo $ContainerID
 dockerDone=false
 while [ $dockerDone == false ]
 do
-    dockerDone=$(docker exec -it mysqlserver sh -c "test -d /socialResult.txt")
+    dockerDone=$(docker exec -it mysqlserver sh -c "test -d /socialResult")
     sleep 10
 done
 
