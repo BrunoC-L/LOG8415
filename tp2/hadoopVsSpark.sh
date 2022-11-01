@@ -39,27 +39,27 @@ do
     rm -r /usr/local/hadoop-3.3.4/run$i/output8 
     rm -r /usr/local/hadoop-3.3.4/run$i/output9 
     # Running the application on hadoop
-    time hadoop jar /usr/local/hadoop-3.3.4/wc.jar WordCount ~/input2/4vxdw3pa /usr/local/hadoop-3.3.4/run$i/output1 >> ~/hadoop/run$i/output1.txt
-    time hadoop jar /usr/local/hadoop-3.3.4/wc.jar WordCount ~/input2/kh9excea /usr/local/hadoop-3.3.4/run$i/output2 >> ~/hadoop/run$i/output2.txt
-    time hadoop jar /usr/local/hadoop-3.3.4/wc.jar WordCount ~/input2/dybs9bnk /usr/local/hadoop-3.3.4/run$i/output3 >> ~/hadoop/run$i/output3.txt
-    time hadoop jar /usr/local/hadoop-3.3.4/wc.jar WordCount ~/input2/datumz6m /usr/local/hadoop-3.3.4/run$i/output4 >> ~/hadoop/run$i/output4.txt
-    time hadoop jar /usr/local/hadoop-3.3.4/wc.jar WordCount ~/input2/j4j4xdw6 /usr/local/hadoop-3.3.4/run$i/output5 >> ~/hadoop/run$i/output5.txt
-    time hadoop jar /usr/local/hadoop-3.3.4/wc.jar WordCount ~/input2/ym8s5fm4 /usr/local/hadoop-3.3.4/run$i/output6 >> ~/hadoop/run$i/output6.txt
-    time hadoop jar /usr/local/hadoop-3.3.4/wc.jar WordCount ~/input2/2h6a75nk /usr/local/hadoop-3.3.4/run$i/output7 >> ~/hadoop/run$i/output7.txt
-    time hadoop jar /usr/local/hadoop-3.3.4/wc.jar WordCount ~/input2/vwvram8 /usr/local/hadoop-3.3.4/run$i/output8 >> ~/hadoop/run$i/output8.txt
-    time hadoop jar /usr/local/hadoop-3.3.4/wc.jar WordCount ~/input2/weh83uyn /usr/local/hadoop-3.3.4/run$i/output9 >> ~/hadoop/run$i/output9.txt
+    time hadoop jar /usr/local/hadoop-3.3.4/wc.jar WordCount ~/input2/4vxdw3pa /usr/local/hadoop-3.3.4/run$i/output1 2> ~/hadoop/run$i/output1.txt
+    time hadoop jar /usr/local/hadoop-3.3.4/wc.jar WordCount ~/input2/kh9excea /usr/local/hadoop-3.3.4/run$i/output2 2> ~/hadoop/run$i/output2.txt
+    time hadoop jar /usr/local/hadoop-3.3.4/wc.jar WordCount ~/input2/dybs9bnk /usr/local/hadoop-3.3.4/run$i/output3 2> ~/hadoop/run$i/output3.txt
+    time hadoop jar /usr/local/hadoop-3.3.4/wc.jar WordCount ~/input2/datumz6m /usr/local/hadoop-3.3.4/run$i/output4 2> ~/hadoop/run$i/output4.txt
+    time hadoop jar /usr/local/hadoop-3.3.4/wc.jar WordCount ~/input2/j4j4xdw6 /usr/local/hadoop-3.3.4/run$i/output5 2> ~/hadoop/run$i/output5.txt
+    time hadoop jar /usr/local/hadoop-3.3.4/wc.jar WordCount ~/input2/ym8s5fm4 /usr/local/hadoop-3.3.4/run$i/output6 2> ~/hadoop/run$i/output6.txt
+    time hadoop jar /usr/local/hadoop-3.3.4/wc.jar WordCount ~/input2/2h6a75nk /usr/local/hadoop-3.3.4/run$i/output7 2> ~/hadoop/run$i/output7.txt
+    time hadoop jar /usr/local/hadoop-3.3.4/wc.jar WordCount ~/input2/vwvram8 /usr/local/hadoop-3.3.4/run$i/output8 2> ~/hadoop/run$i/output8.txt
+    time hadoop jar /usr/local/hadoop-3.3.4/wc.jar WordCount ~/input2/weh83uyn /usr/local/hadoop-3.3.4/run$i/output9 2> ~/hadoop/run$i/output9.txt
 
     # Results
     # hadoop fs -cat ./output/part-r-00000
 
     # spark
-    time spark-submit /opt/spark/examples/src/main/python.py ~/input2/4vxdw3pa >> ~/spark/run$i/output1.txt
-    time spark-submit /opt/spark/examples/src/main/python.py ~/input2/kh9excea  >> ~/spark/run$i/output2.txt
-    time spark-submit /opt/spark/examples/src/main/python.py ~/input2/dybs9bnk  >> ~/spark/run$i/output3.txt
-    time spark-submit /opt/spark/examples/src/main/python.py ~/input2/datumz6m  >> ~/spark/run$i/output4.txt
-    time spark-submit /opt/spark/examples/src/main/python.py ~/input2/j4j4xdw6  >> ~/spark/run$i/output5.txt
-    time spark-submit /opt/spark/examples/src/main/python.py ~/input2/ym8s5fm4  >> ~/spark/run$i/output6.txt
-    time spark-submit /opt/spark/examples/src/main/python.py ~/input2/2h6a75nk  >> ~/spark/run$i/output7.txt
-    time spark-submit /opt/spark/examples/src/main/python.py ~/input2/vwvram8  >> ~/spark/run$i/output8.txt
-    time spark-submit /opt/spark/examples/src/main/python.py ~/input2/weh83uyn  >> ~/spark/run$i/output9.txt
+    time spark-submit /opt/spark/examples/src/main/python.py ~/input2/4vxdw3pa 2> ~/spark/run$i/output1.txt
+    time spark-submit /opt/spark/examples/src/main/python.py ~/input2/kh9excea  2> ~/spark/run$i/output2.txt
+    time spark-submit /opt/spark/examples/src/main/python.py ~/input2/dybs9bnk  2> ~/spark/run$i/output3.txt
+    time spark-submit /opt/spark/examples/src/main/python.py ~/input2/datumz6m  2> ~/spark/run$i/output4.txt
+    time spark-submit /opt/spark/examples/src/main/python.py ~/input2/j4j4xdw6  2> ~/spark/run$i/output5.txt
+    time spark-submit /opt/spark/examples/src/main/python.py ~/input2/ym8s5fm4  2> ~/spark/run$i/output6.txt
+    time spark-submit /opt/spark/examples/src/main/python.py ~/input2/2h6a75nk  2> ~/spark/run$i/output7.txt
+    time spark-submit /opt/spark/examples/src/main/python.py ~/input2/vwvram8  2> ~/spark/run$i/output8.txt
+    time spark-submit /opt/spark/examples/src/main/python.py ~/input2/weh83uyn  2> ~/spark/run$i/output9.txt
 done
