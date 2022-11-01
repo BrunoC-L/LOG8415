@@ -8,6 +8,14 @@ VALUE_COMMON_FRIEND = 1
 
 # parse a line of the txt file such as '0\t1,2,3,4,5\n' to (0,[1,2,3,4,5])
 def parse_line(line):
+    """
+    thid function does x
+
+    args
+    line type:string what is it
+
+    returns
+    """
     # split to separate user and friends
     array = line.split()
     user = int(array[0])
