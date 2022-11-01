@@ -38,7 +38,7 @@ ImageId=$(sudo docker images "myimage*" --format "{{.ID}}")
 
 # Running a docker container with our custom image
 echo "Docker run starting using image $ImageId" >> /var/log/user-data.log
-sudo docker run -dit --name hdpcontainter $ImageId
+sudo docker run -it --name hdpcontainter $ImageId
 ContainerID=$(sudo docker ps -a --format "{{.ID}}")
 echo $ContainerID
 dockerDone=false
