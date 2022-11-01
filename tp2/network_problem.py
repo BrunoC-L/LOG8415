@@ -1,3 +1,5 @@
+#inspired from : https://github.com/JaceyPenny/pyspark-friend-recommendation
+
 from pyspark import SparkConf, SparkContext
 from os import remove, removedirs, listdir
 
