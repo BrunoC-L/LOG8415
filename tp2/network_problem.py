@@ -111,7 +111,7 @@ def spark_run():
         .groupByKey() \
         .map(lambda edge: (edge[0], recommendation_to_sorted_truncated(edge[1])))
 
-    save(recommendations, "./result")
+    save(recommendations, "/socialResult.txt")
     sc.stop()
     print('done')
 
