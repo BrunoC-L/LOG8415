@@ -31,14 +31,14 @@ cat dockerfile > /var/log/user-data-dockerfile.log
 
 # Building the image
 echo "Docker build starting" >> /var/log/user-data.log
-sudo docker build -t hadoopsparkImage - < dockerfile &>> /var/log/docker-build.log
+sudo docker build -t hadoopsparkimage - < dockerfile &>> /var/log/docker-build.log
 echo "Docker build completed" >> /var/log/user-data.log
 
-ImageId=$(sudo docker images "hadoopsparkImage*" --format "{{.ID}}")
+ImageId=$(sudo docker images "hadoopsparkimage*" --format "{{.ID}}")
 
 # Running a docker container with our custom image
 echo "Docker run starting using image $ImageId" >> /var/log/user-data.log
-sudo docker run -it --name hdpcontainter $ImageId
+sudo docker run -d --name hdpcontainter $ImageId
 ContainerID=$(sudo docker ps -a --format "{{.ID}}")
 echo $ContainerID
 dockerDone=false

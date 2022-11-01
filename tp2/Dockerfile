@@ -39,7 +39,7 @@ RUN \
     echo 'export PATH' >> ~/.profile
 
 SHELL ["/bin/bash", "-c"]
-RUN sudo source ~/.profile
+RUN source ~/.profile
 
 # Script to run on the docker container at initialisation
 # CMD curl https://raw.githubusercontent.com/BrunoC-L/LOG8415/main/tp2/docker-run.sh > docker-run.sh && bash docker-run.sh
