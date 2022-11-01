@@ -34,7 +34,7 @@ echo "Docker build starting" >> /var/log/user-data.log
 sudo docker build -t ubuntu_hdpspark - < dockerfile &>> /var/log/docker-build.log
 echo "Docker build completed" >> /var/log/user-data.log
 
-ImageId=$(sudo docker images "myimage*" --format "{{.ID}}")
+ImageId=$(sudo docker images "hdpcontainter*" --format "{{.ID}}")
 
 # Running a docker container with our custom image
 echo "Docker run starting using image $ImageId" >> /var/log/user-data.log
