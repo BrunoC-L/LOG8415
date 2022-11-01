@@ -42,14 +42,14 @@ sudo docker run -d --name hdpcontainter $ImageId
 ContainerID=$(sudo docker ps -a --format "{{.ID}}")
 echo $ContainerID
 dockerDone=false
-while [ $dockerDone == false ]
-do
-    dockerDone=$(docker exec -it mysqlserver sh -c "test -d /socialResult")
-    sleep 10
-done
+# while [ $dockerDone == false ]
+# do
+#    dockerDone=$(docker exec -it mysqlserver sh -c "test -d /socialResult")
+#    sleep 10
+# done
 
 # Getting the results of the scripts that ran on the docker container
-sudo docker cp $ContainerID:/socialResult.txt /var/log/socialResult.txt
-sudo docker cp $ContainerID:/hadoopSparkResult.txt /var/log/hadoopSparkResult.txt
-sudo docker cp $ContainerID:/linuxHadoopResult.txt /var/log/linuxHadoopResult.txt
+# sudo docker cp $ContainerID:/socialResult.txt /var/log/socialResult.txt
+# sudo docker cp $ContainerID:/hadoopSparkResult.txt /var/log/hadoopSparkResult.txt
+# sudo docker cp $ContainerID:/linuxHadoopResult.txt /var/log/linuxHadoopResult.txt
 echo "Docker run completed" >> /var/log/user-data.log
