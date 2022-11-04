@@ -3,14 +3,16 @@
 # Downloading wordcount java file
 TIMEFORMAT=%R
 
-curl https://raw.githubusercontent.com/BrunoC-L/LOG8415/main/tp2/WordCount.java >/usr/local/hadoop-3.3.4/WordCount.java
+curl https://raw.githubusercontent.com/BrunoC-L/LOG8415/main/tp2/WordCount.java > /usr/local/hadoop-3.3.4/WordCount.java
+
+cd /usr/local/hadoop-3.3.4
 
 # Creating wordcount jar file
 hadoop com.sun.tools.javac.Main WordCount.java
 jar cf wc.jar WordCount*.class
 mkdir /usr/local/hadoop-3.3.4/input
 # Downloading input data
-curl https://raw.githubusercontent.com/BrunoC-L/LOG8415/main/tp2/pg4300.txt >/usr/local/hadoop-3.3.4/input/pg4300.txt
+curl https://raw.githubusercontent.com/BrunoC-L/LOG8415/main/tp2/pg4300.txt > /usr/local/hadoop-3.3.4/input/pg4300.txt
 
 # Test files 
 #echo 'Hello World Bye World'>> file01
