@@ -24,9 +24,11 @@ do
 
     # Running the application on hadoop
     for j in {1..9}
+    do
         echo "Run $i Hadoop $j" >> /hadoopSparkResult.txt
         rm -r /usr/local/hadoop-3.3.4/run$i/output$j
         { time hadoop jar /usr/local/hadoop-3.3.4/wc.jar WordCount ~/input2/data$j /usr/local/hadoop-3.3.4/run$i/output$j 2>> remove.stderr;} 2>> /hadoopSparkResult.txt
         echo "Run $i Hadoop $j" >> /hadoopSparkResult.txt
         { time spark-submit /opt/spark/examples/src/main/python.py ~/input2/data$j 2>> remove.stderr ;} 2>> /hadoopSparkResult.txt
+    done
 done
