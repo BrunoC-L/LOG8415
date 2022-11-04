@@ -9,12 +9,13 @@ VALUE_COMMON_FRIEND = 1
 # parse a line of the txt file such as '0\t1,2,3,4,5\n' to (0,[1,2,3,4,5])
 def parse_line(line):
     """
-    thid function does x
+    This function take a line from the input text file and transform it to an usable tuple.
 
-    args
-    line type:string what is it
+    args : 
+        line type:string like <ID>TAB<friend1>,<friend2>,<friend3>...
 
-    returns
+    returns a tuple type (int,List[int]) 
+    where the first element is an id and the second element is a list of id of user's friends
     """
     # split to separate user and friends
     array = line.split()
@@ -27,9 +28,19 @@ def parse_line(line):
     else :
         return (user, [])
 
-# make connection between user and all friend, and between all his friend and specify if there are friend or not with 0 or 1 flag
-# output : [((0,1),0), ((0,2),1), ....] --> users 0 and 1 are friends and users 0 and 2 have a mutual friend
+
+# output : 
 def create_friend_connection(user, friends):
+    """
+    This function create connection between user and all friend, and between all his friend and specify if there are friend or not with 0 or 1 flag
+   
+    args: 
+        user : type int, id of the user
+        friends : type List(int), list of id
+        
+    output: list of tuple (key,value) with key as a tuple of id and value as 0 or 1
+        Example: [((0,1),0), ((0,2),1), ....] --> users 0 and 1 are friends and users 0 and 2 have a mutual friend
+    """
     list_connections = []
     # add friend connections
     for friend in friends:
@@ -48,13 +59,34 @@ def create_friend_connection(user, friends):
     
     return list_connections
 
-# takes `(user0, user1), count` and returns [(user0, (user1, count)), (user1, (user0, count))]
+# takes `, count` and returns 
 def mutual_friend_count_to_recommendation(edge, count):
+    """
+     This function create recommandation given a connection 'edge' and the count of mutual friend 'count'
+   
+    args: 
+        edge : (int, int) tuple of user id, (user0, user1)
+        count : int number of mutual friend
+        
+    output: list of recommandation (2) for given connection including the count of mutual friends
+            list of tuple (key,value) with key as an id (int) and value as a tuple (int, int)
+            Example : [(user0, (user1, count)), (user1, (user0, count))]
+    """
     user_0 = edge[0]
     user_1 = edge[1]
     return [(user_0, (user_1, count)), (user_1, (user_0, count))]
 
 def aBetterThanB(recommendationA, recommendationB):
+    """
+    This function returns True or False depending of the two user_id in recommandation
+    
+    args: 
+        recommendationA
+        recommendationB
+    
+    output: 
+        Boolean
+    """
     # prefer larger friend counter ([1]) but if equal smaller user_id ([0])
     return recommendationA[1] > recommendationB[1] or (recommendationA[1] == recommendationB[1] and recommendationA[0] < recommendationB[0])
 
