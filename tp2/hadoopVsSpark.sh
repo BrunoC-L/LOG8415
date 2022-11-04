@@ -18,17 +18,19 @@ curl http://www.gutenberg.ca/ebooks/delamare-lucy/delamare-lucy-00-t.txt > ~/inp
 curl http://www.gutenberg.ca/ebooks/delamare-myfanwy/delamare-myfanwy-00-t.txt > ~/input2/data8
 curl http://www.gutenberg.ca/ebooks/delamare-penny/delamare-penny-00-t.txt > ~/input2/data9
 
+TIMEFORMAT=%R
+
 for i in 1 2 3
 do
+    rm -R /usr/local/hadoop-3.3.4/run$i
     mkdir /usr/local/hadoop-3.3.4/run$i
 
     # Running the application on hadoop
     for j in {1..9}
     do
         echo "Run $i Hadoop $j" >> /hadoopSparkResult.txt
-        rm -r /usr/local/hadoop-3.3.4/run$i/output$j
         { time hadoop jar /usr/local/hadoop-3.3.4/wc.jar WordCount ~/input2/data$j /usr/local/hadoop-3.3.4/run$i/output$j 2>> remove.stderr;} 2>> /hadoopSparkResult.txt
-        echo "Run $i Hadoop $j" >> /hadoopSparkResult.txt
+        echo "Run $i Spark $j" >> /hadoopSparkResult.txt
         { time spark-submit /opt/spark/examples/src/main/python.py ~/input2/data$j 2>> remove.stderr ;} 2>> /hadoopSparkResult.txt
     done
 done
