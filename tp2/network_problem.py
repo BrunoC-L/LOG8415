@@ -6,17 +6,20 @@ from os import remove, removedirs, listdir
 VALUE_DIRECT_FRIEND = 0
 VALUE_COMMON_FRIEND = 1
 
-# parse a line of the txt file such as '0\t1,2,3,4,5\n' to (0,[1,2,3,4,5])
+
 def parse_line(line):
     """
     This function take a line from the input text file and transform it to an usable tuple.
+    Example of line input : '0\t1,2,3,4,5\n'
 
     args : 
         line type:string like <ID>TAB<friend1>,<friend2>,<friend3>...
 
-    returns a tuple type (int,List[int]) 
+    output a tuple type (int,List[int]) 
     where the first element is an id and the second element is a list of id of user's friends
+    output example :  (0,[1,2,3,4,5])
     """
+    
     # split to separate user and friends
     array = line.split()
     user = int(array[0])
@@ -29,7 +32,6 @@ def parse_line(line):
         return (user, [])
 
 
-# output : 
 def create_friend_connection(user, friends):
     """
     This function create connection between user and all friend, and between all his friend and specify if there are friend or not with 0 or 1 flag
@@ -59,7 +61,7 @@ def create_friend_connection(user, friends):
     
     return list_connections
 
-# takes `, count` and returns 
+
 def mutual_friend_count_to_recommendation(edge, count):
     """
      This function create recommandation given a connection 'edge' and the count of mutual friend 'count'
@@ -87,10 +89,21 @@ def aBetterThanB(recommendationA, recommendationB):
     output: 
         Boolean
     """
+    
     # prefer larger friend counter ([1]) but if equal smaller user_id ([0])
     return recommendationA[1] > recommendationB[1] or (recommendationA[1] == recommendationB[1] and recommendationA[0] < recommendationB[0])
 
+
 def insert(recommendations, recommendation):
+    """
+    This function select the top 10 recommandations based of number of mutual friends. to a list for a specific user.
+    
+    args: 
+        recommendations : list of recommendations
+        recommendation : one recommendation
+    output: 
+        None (it modify the input 'recommendations')
+    """
     if len(recommendations) < 10:
         recommendations += [recommendation]
     else: # out of space, shuffle (insertion sort except the smallest element is removed)
@@ -103,7 +116,15 @@ def insert(recommendations, recommendation):
                 return
 
 def recommendation_to_sorted_truncated(recommendations):
-    # recommendations are sorted from best to worst
+    """
+    This function sort recommendations from best to worst based on the number of mutual friends
+    
+    args: 
+        recommendations : tuple (int, list[tuple(int,int)]), first element is an user id and second element is a list of recommendations for the user
+    output: 
+        list(int), list of user id recommanded
+    """
+    
     top10 = []
     for rec in recommendations:
         if len(top10) == 0 or aBetterThanB(rec, top10[-1]):
