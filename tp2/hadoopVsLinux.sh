@@ -28,6 +28,6 @@ echo "HADOOP " >> /linuxHadoopResult.txt
 
 echo "LINUX " >> /linuxHadoopResult.txt
 #running on linux 
-time cat input/pg4300.txt | tr ' ' '\n' | sort | uniq -c 2>> /linuxHadoopResult.txt
+{ time cat input/pg4300.txt | tr ' ' '\n' | sort | uniq -c 2>> remove.stderr ;} 2>> /linuxHadoopResult.txt
 
 # cat /usr/local/hadoop-3.3.4/linuxHadoopResult.txt
