@@ -31,6 +31,6 @@ do
         echo "Run $i Hadoop $j" >> /hadoopSparkResult.txt
         { time hadoop jar /usr/local/hadoop-3.3.4/wc.jar WordCount ~/input2/data$j /usr/local/hadoop-3.3.4/run$i/output$j 2>> remove.stderr;} 2>> /hadoopSparkResult.txt
         echo "Run $i Spark $j" >> /hadoopSparkResult.txt
-        { time spark-submit /opt/spark/examples/src/main/python.py ~/input2/data$j 2>> remove.stderr ;} 2>> /hadoopSparkResult.txt
+        { time spark-submit /wordCount.py ~/input2/data$j 2>> remove.stderr ;} 2>> /hadoopSparkResult.txt
     done
 done
