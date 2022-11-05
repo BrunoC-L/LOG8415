@@ -22,7 +22,7 @@ curl https://raw.githubusercontent.com/BrunoC-L/LOG8415/main/tp2/pg4300.txt > /u
 
 # Running the application on hadoop
 echo "HADOOP " >> /linuxHadoopResult.txt
-{ time ./usr/local/hadoop-3.3.4/bin/hadoop jar wc.jar WordCount input output  2>> remove.stderr ;} 2>> /linuxHadoopResult.txt
+{ time /usr/local/hadoop-3.3.4/bin/hadoop jar wc.jar WordCount input output  2>> remove.stderr ;} 2>> /linuxHadoopResult.txt
 # Results
 # hadoop fs -cat ./output/part-r-00000
 

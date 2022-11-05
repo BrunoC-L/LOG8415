@@ -29,7 +29,7 @@ do
     for j in {1..9}
     do
         echo "Run $i Hadoop $j" >> /hadoopSparkResult.txt
-        { time ./usr/local/hadoop-3.3.4/bin/hadoop jar /usr/local/hadoop-3.3.4/wc.jar WordCount ~/input2/data$j /usr/local/hadoop-3.3.4/run$i/output$j 2>> remove.stderr;} 2>> /hadoopSparkResult.txt
+        { time /usr/local/hadoop-3.3.4/bin/hadoop jar /usr/local/hadoop-3.3.4/wc.jar WordCount ~/input2/data$j /usr/local/hadoop-3.3.4/run$i/output$j 2>> remove.stderr;} 2>> /hadoopSparkResult.txt
         echo "Run $i Spark $j" >> /hadoopSparkResult.txt
         { time python3 /wordCount.py ~/input2/data$j 2>> remove.stderr ;} 2>> /hadoopSparkResult.txt
     done
