@@ -44,6 +44,6 @@ if [ "$SecurityGroup" == "" ]; then
     aws ec2 authorize-security-group-egress  --group-id $SecurityGroup --protocol tcp --port 80   --cidr 0.0.0.0/0
     aws ec2 authorize-security-group-egress  --group-id $SecurityGroup --protocol tcp --port 443  --cidr 0.0.0.0/0
 fi
-
+curl https://raw.githubusercontent.com/BrunoC-L/LOG8415/main/tp2/setupInstance.sh > setupInstance.sh
 M4Large="$(aws ec2 run-instances --image-id $ECSImageId --count 1 --instance-type m4.large --security-group-ids $SecurityGroup --key-name vockey --user-data file://setupInstance.sh --placement AvailabilityZone=$Zone --query "Instances[].[InstanceId]" --output text)"
 echo $M4Large
