@@ -16,6 +16,7 @@ RUN \
     echo 'PATH=$PATH:$HOME/bin:$JAVA_HOME/bin' >> ~/.profile &&\
     echo 'export JAVA_HOME' >> ~/.profile &&\
     echo 'export JRE_HOME' >> ~/.profile &&\
+    echo 'export PATH' >> ~/.profile
 
 # Downloading hadoop distribution
 RUN apt-get update && apt-get install -y wget
