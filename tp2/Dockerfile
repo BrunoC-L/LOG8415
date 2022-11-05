@@ -16,7 +16,6 @@ RUN \
     echo 'PATH=$PATH:$HOME/bin:$JAVA_HOME/bin' >> ~/.profile &&\
     echo 'export JAVA_HOME' >> ~/.profile &&\
     echo 'export JRE_HOME' >> ~/.profile &&\
-    echo 'export PATH' >> ~/.profile
 
 # Downloading hadoop distribution
 RUN apt-get update && apt-get install -y wget
@@ -31,6 +30,10 @@ RUN \
 
 # Setting the hadoop environment variables to be able to use the hadoop command
 # Precising that from now it is bash scripting (this is to be able to use source)
+
+RUN \
+    echo 'PATH=$PARH:/opt/spark/bin:/opt/spark/sbin' >> ~/.profile
+    echo 'export PATH' >> ~/.profile
 
 RUN \
     echo 'HADOOP_HOME=/usr/local/hadoop-3.3.4' >> ~/.profile &&\
