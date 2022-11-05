@@ -39,6 +39,7 @@ ImageId=$(sudo docker images "hadoopsparkimage*" --format "{{.ID}}")
 # Running a docker container with our custom image
 echo "Docker run starting using image $ImageId" >> /var/log/user-data.log
 sudo docker run -d --name hdpcontainter $ImageId
+sleep 60
 ContainerID=$(sudo docker ps -a --format "{{.ID}}")
 echo $ContainerID
 temp=$ContainerID
