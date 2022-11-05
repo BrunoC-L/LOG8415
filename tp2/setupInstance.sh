@@ -43,6 +43,8 @@ sleep 60
 ContainerID=$(sudo docker ps -a --format "{{.ID}}")
 echo "Docker run started using container $ContainerID" >> /var/log/user-data.log
 temp=$ContainerID
+# here we wait until the result from docker ps differs from the first execution,
+# which happens when the container is no longer running, which we wait for to docker cp
 while [ "$temp" == "$ContainerID" ]
 do
     temp=$(sudo docker ps --format "{{.ID}}")
