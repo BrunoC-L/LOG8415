@@ -145,15 +145,11 @@ def save(obj, loc):
 
 def spark_run():
     print('starting')
-    # TODO remove refs to SHORT for release
-    SHORT=False
 
     conf = SparkConf().set("spark.executor.cores", 4).set("spark.executor.instances", 4)
     sc = SparkContext(conf=conf)
 
     fileLoc = 'soc-LiveJournal1Adj.txt'
-    if SHORT:
-        fileLoc = 'soc-LiveJournal1Adj-short.txt'
     lines = sc.textFile(fileLoc)
 
     # friend edges are of shapes ((user_id1, user_id2), 0 or 1) with 0 meaning friends, 1 meaning mutual friend
