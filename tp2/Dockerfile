@@ -29,13 +29,13 @@ RUN \
     echo 'export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64' >> /usr/local/hadoop-3.3.4/etc/hadoop/hadoop-env.sh &&\
     echo 'export HADOOP_HOME=/usr/local/hadoop-3.3.4' >> /usr/local/hadoop-3.3.4/etc/hadoop/hadoop-env.sh
 
-# Setting the hadoop environment variables to be able to use the hadoop command
-# Precising that from now it is bash scripting (this is to be able to use source)
-
+# Setting up pyspark environment variables
 RUN \
-    echo 'PATH=$PATH:/opt/spark/bin:/opt/spark/sbin' >> ~/.profile &&\
+    echo 'PATH=$PATH:/usr/local/bin' >> ~/.profile &&\
     echo 'export PATH' >> ~/.profile
 
+# Setting the hadoop environment variables to be able to use the hadoop command
+# Precising that from now it is bash scripting (this is to be able to use source)
 RUN \
     echo 'HADOOP_HOME=/usr/local/hadoop-3.3.4' >> ~/.profile &&\
     echo 'PATH=$HADOOP_HOME/bin:$PATH' >> ~/.profile &&\
