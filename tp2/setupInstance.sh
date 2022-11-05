@@ -41,7 +41,7 @@ echo "Docker run starting using image $ImageId" >> /var/log/user-data.log
 sudo docker run -d --name hdpcontainter $ImageId
 sleep 60
 ContainerID=$(sudo docker ps -a --format "{{.ID}}")
-echo $ContainerID
+echo "Docker run started using container $ContainerID" >> /var/log/user-data.log
 temp=$ContainerID
 while [ "$temp" == "$ContainerID" ]
 do
