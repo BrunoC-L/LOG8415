@@ -32,7 +32,7 @@ RUN \
 # Precising that from now it is bash scripting (this is to be able to use source)
 
 RUN \
-    echo 'PATH=$PARH:/opt/spark/bin:/opt/spark/sbin' >> ~/.profile
+    echo 'PATH=$PARH:/opt/spark/bin:/opt/spark/sbin' >> ~/.profile &&\
     echo 'export PATH' >> ~/.profile
 
 RUN \
