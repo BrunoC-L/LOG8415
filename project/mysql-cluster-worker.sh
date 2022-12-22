@@ -13,7 +13,7 @@ wget https://dev.mysql.com/get/Downloads/MySQL-Cluster-7.6/$version
 sudo dpkg -i $version
 
 echo "waiting on node ips" >> /var/log/user-data.log
-sleep 60
+sleep 100
 
 sudo mkdir -p /usr/local/mysql
 sudo mkdir -p /usr/local/mysql/data

@@ -11,7 +11,7 @@ wget https://dev.mysql.com/get/Downloads/MySQL-Cluster-7.6/$version
 sudo dpkg -i $version
 
 echo "waiting on node ips" >> /var/log/user-data.log
-sleep 60
+sleep 100
 
 echo "config.ini" >> /var/log/user-data.log
 sudo mkdir /var/lib/mysql-cluster
@@ -37,6 +37,7 @@ echo "dependencies" >> /var/log/user-data.log
 sudo dpkg -i mysql-common_7.6.6-1ubuntu18.04_amd64.deb
 sudo dpkg -i mysql-cluster-community-client_7.6.6-1ubuntu18.04_amd64.deb
 sudo dpkg -i mysql-client_7.6.6-1ubuntu18.04_amd64.deb
+echo "interactive" >> /var/log/user-data.log
 # sudo dpkg -i mysql-cluster-community-server_7.6.6-1ubuntu18.04_amd64.deb
 # sudo dpkg -i mysql-server_7.6.6-1ubuntu18.04_amd64.deb
 
