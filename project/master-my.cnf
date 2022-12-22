@@ -1,7 +1,10 @@
+!includedir /etc/mysql/conf.d/
+!includedir /etc/mysql/mysql.conf.d/
+
 [mysqld]
 ndbcluster 
 skip_ssl
 bind-address=0.0.0.0
 
 [mysql_cluster]
-ndb-connectstring=172.31.93.245
+ndb-connectstring=172.31.86.243
