@@ -5,10 +5,16 @@ sudo apt update
 
 echo "mysql cluster master" >> /var/log/user-data.log
 
-wget https://dev.mysql.com/get/Downloads/MySQL-Cluster-8.0/mysql-cluster-community-management-server_8.0.31-1ubuntu20.04_amd64.deb
-sudo dpkg -i mysql-cluster-community-management-server_8.0.31-1ubuntu20.04_amd64.deb
+version=mysql-cluster-community-management-server_7.6.6-1ubuntu18.04_amd64.deb
+
+wget https://dev.mysql.com/get/Downloads/MySQL-Cluster-7.6/$version
+sudo dpkg -i $version
+
+echo "waiting on node ips" >> /var/log/user-data.log
+sleep 60
 
 echo "config.ini" >> /var/log/user-data.log
+
 sudo mkdir /var/lib/mysql-cluster
 
 
