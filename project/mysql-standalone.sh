@@ -23,9 +23,3 @@ sudo service mysql restart
 
 echo "requesting" >> /var/log/user-data.log
 sudo mysql -e "use sakila; select * from inventory limit 1;" >> /var/log/user-data.log
-
-# echo "sysbench" >> /var/log/user-data.log
-sudo apt -y install sysbench
-# sudo mysql -e "create database dbtest;"
-
-# echo "ready" >> /var/log/user-data.log

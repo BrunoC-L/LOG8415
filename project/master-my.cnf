@@ -1,0 +1,7 @@
+[mysqld]
+ndbcluster 
+skip_ssl
+bind-address=0.0.0.0
+
+[mysql_cluster]
+ndb-connectstring=172.31.81.161

@@ -14,10 +14,13 @@ echo "waiting on node ips" >> /var/log/user-data.log
 sleep 60
 
 echo "config.ini" >> /var/log/user-data.log
-
 sudo mkdir /var/lib/mysql-cluster
+curl https://raw.githubusercontent.com/BrunoC-L/LOG8415/main/project/master-config.ini > config.ini
+sudo cp config.ini /var/lib/mysql-cluster/config.ini
 
-
+curl https://raw.githubusercontent.com/BrunoC-L/LOG8415/main/project/master-my.cnf > my.cnf
+sudo mkdir /etc/mysql
+sudo cp my.cnf /etc/mysql/my.cnf
 
 # sudo apt -y install libclass-methodmaker-perl
 # sudo apt -y install libncurses5

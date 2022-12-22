@@ -47,14 +47,66 @@ if [ "$SecurityGroup" == "" ]; then
     aws ec2 authorize-security-group-ingress --group-id $SecurityGroup --protocol tcp --port 3306      --cidr 0.0.0.0/0
 fi
 
-# standalone="$(aws ec2 run-instances --image-id $ECSImageId --count 1 --instance-type t2.micro --security-group-ids $SecurityGroup --key-name vockey --user-data file://mysql-standalone.sh --query "Instances[].[InstanceId]" --output text)"
-# standaloneIP=$(aws ec2 describe-instances --instance-id $standalone --query "Reservations[].Instances[].PublicIpAddress[]" --output text)
-# echo standalone $standaloneIP
+# single="$(aws ec2 run-instances --image-id $ECSImageId --count 1 --instance-type t2.micro --security-group-ids $SecurityGroup --key-name vockey --user-data file://mysql-standalone.sh --query "Instances[].[InstanceId]" --output text)"
+# sleep 1
+# singleIP=$(aws ec2 describe-instances --instance-id $single --query "Reservations[].Instances[].PublicIpAddress[]" --output text)
+# echo single $singleIP
 
 master="$(aws ec2 run-instances --image-id $ECSImageId --count 1 --subnet-id=$Subnet --instance-type t2.micro --security-group-ids $SecurityGroup --key-name vockey --user-data file://mysql-cluster-master.sh --query "Instances[].[InstanceId]" --output text)"
+sleep 1
 masterIP=$(aws ec2 describe-instances --instance-id $master --query "Reservations[].Instances[].PublicIpAddress[]" --output text)
-echo master $masterIP
+masterPrivateIP=$(aws ec2 describe-instances --instance-id $master --query "Reservations[].Instances[].PrivateIpAddress[]" --output text)
+echo master $masterIP $masterPrivateIP
 
-worker="$(aws ec2 run-instances --image-id $ECSImageId --count 3 --subnet-id=$Subnet --instance-type t2.micro --security-group-ids $SecurityGroup --key-name vockey --user-data file://mysql-cluster-worker.sh --query "Instances[].[InstanceId]" --output text)"
-workerIP=$(aws ec2 describe-instances --instance-id $worker --query "Reservations[].Instances[].PublicIpAddress[]" --output text)
-echo workers $workerIP
+worker1="$(aws ec2 run-instances --image-id $ECSImageId --count 1 --subnet-id=$Subnet --instance-type t2.micro --security-group-ids $SecurityGroup --key-name vockey --user-data file://mysql-cluster-worker.sh --query "Instances[].[InstanceId]" --output text)"
+sleep 1
+worker1IP=$(aws ec2 describe-instances --instance-id $worker1 --query "Reservations[].Instances[].PublicIpAddress[]" --output text)
+worker1PrivateIP=$(aws ec2 describe-instances --instance-id $worker1 --query "Reservations[].Instances[].PrivateIpAddress[]" --output text)
+echo worker $worker1IP $worker1PrivateIP
+
+worker2="$(aws ec2 run-instances --image-id $ECSImageId --count 1 --subnet-id=$Subnet --instance-type t2.micro --security-group-ids $SecurityGroup --key-name vockey --user-data file://mysql-cluster-worker.sh --query "Instances[].[InstanceId]" --output text)"
+sleep 1
+worker2IP=$(aws ec2 describe-instances --instance-id $worker2 --query "Reservations[].Instances[].PublicIpAddress[]" --output text)
+worker2PrivateIP=$(aws ec2 describe-instances --instance-id $worker2 --query "Reservations[].Instances[].PrivateIpAddress[]" --output text)
+echo worker $worker2IP $worker2PrivateIP
+
+worker3="$(aws ec2 run-instances --image-id $ECSImageId --count 1 --subnet-id=$Subnet --instance-type t2.micro --security-group-ids $SecurityGroup --key-name vockey --user-data file://mysql-cluster-worker.sh --query "Instances[].[InstanceId]" --output text)"
+sleep 1
+worker3IP=$(aws ec2 describe-instances --instance-id $worker3 --query "Reservations[].Instances[].PublicIpAddress[]" --output text)
+worker3PrivateIP=$(aws ec2 describe-instances --instance-id $worker3 --query "Reservations[].Instances[].PrivateIpAddress[]" --output text)
+echo worker $worker3IP $worker3PrivateIP
+
+echo "[ndbd default]
+
+[ndb_mgmd]
+hostname=$masterPrivateIP
+datadir=/var/lib/mysql-cluster
+
+[ndbd]
+hostname=$worker1PrivateIP
+NodeId=worker1
+datadir=/usr/local/mysql/data
+
+[ndbd]
+hostname=$worker2PrivateIP
+NodeId=worker2
+datadir=/usr/local/mysql/data
+
+[ndbd]
+hostname=$worker3PrivateIP
+NodeId=worker3
+datadir=/usr/local/mysql/data
+
+[mysqld]
+hostname=$masterPrivateIP" > master-config.ini
+
+echo "[mysqld]
+ndbcluster 
+skip_ssl
+bind-address=0.0.0.0
+
+[mysql_cluster]
+ndb-connectstring=$masterPrivateIP" > master-my.cnf
+
+echo "[mysql_cluster]
+ndb-connectstring=$masterPrivateIP" > worker-my.cnf
