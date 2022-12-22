@@ -7,7 +7,7 @@ echo "mysql standalone" >> /var/log/user-data.log
 sudo apt install -y mysql-server >> /var/log/user-data.log
 
 echo "download sample db" >> /var/log/user-data.log
-sudo wget https://downloads.mysql.com/docs/sakila-db.tar.gz && sudo tar -xf sakila-db.tar.gz -C /tmp/>> /var/log/user-data.log
+sudo wget https://downloads.mysql.com/docs/sakila-db.tar.gz && sudo tar -xf sakila-db.tar.gz -C /tmp/ >> /var/log/user-data.log
 
 echo "mysql" >> /var/log/user-data.log
 
