@@ -53,7 +53,7 @@ sudo systemctl restart mysql
 echo "download sample db" >> /var/log/user-data.log
 sudo wget https://downloads.mysql.com/docs/sakila-db.tar.gz && sudo tar -xf sakila-db.tar.gz -C /tmp/
 
-sudo mysql -u root -pabcd -e "SOURCE /tmp/sakila-db/sakila-schema.sql;"
-sudo mysql -u root -pabcd -e "SOURCE /tmp/sakila-db/sakila-data.sql;"
-sudo mysql -u root -pabcd -e "create user 'bruno'@'%' identified by 'bruno';"
-sudo mysql -u root -pabcd -e "GRANT ALL ON *.* TO 'bruno'@'%';"
+sudo mysql -u root -e "SOURCE /tmp/sakila-db/sakila-schema.sql;"
+sudo mysql -u root -e "SOURCE /tmp/sakila-db/sakila-data.sql;"
+sudo mysql -u root -e "create user 'bruno'@'%' identified by 'bruno';"
+sudo mysql -u root -e "GRANT ALL ON *.* TO 'bruno'@'%';"
