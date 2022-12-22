@@ -101,7 +101,10 @@ datadir=/usr/local/mysql/data
 [mysqld]
 hostname=$masterPrivateIP" > master-config.ini
 
-echo "[mysqld]
+echo "!includedir /etc/mysql/conf.d/
+!includedir /etc/mysql/mysql.conf.d/
+
+[mysqld]
 ndbcluster 
 skip_ssl
 bind-address=0.0.0.0
