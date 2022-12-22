@@ -16,9 +16,16 @@ sudo mysql -u root -e "SOURCE /tmp/sakila-db/sakila-data.sql;"
 sudo mysql -u root -e "create user 'bruno'@'%' identified by 'bruno';"
 sudo mysql -u root -e "GRANT ALL ON *.* TO 'bruno'@'%';"
 
-echo "server set up" >> /var/log/user-data.log
+echo "allow external mysql requests" >> /var/log/user-data.log
+curl https://raw.githubusercontent.com/BrunoC-L/LOG8415/main/project/mysqld.cnf > mysqld.cnf
+sudo cp mysqld.cnf /etc/mysql/mysql.conf.d/mysqld.cnf
+sudo service mysql restart
 
-# sudo vi /etc/mysql/mysql.conf.d/mysqld.cnf  # Set IP allowed 0.0.0.0
-# sudo service mysql restart
+echo "requesting" >> /var/log/user-data.log
+sudo mysql -e "use sakila; select * from inventory limit 1;" >> /var/log/user-data.log
 
-# sudo mysql -e "use sakila; select * from inventory"
+# echo "sysbench" >> /var/log/user-data.log
+sudo apt -y install sysbench
+# sudo mysql -e "create database dbtest;"
+
+# echo "ready" >> /var/log/user-data.log

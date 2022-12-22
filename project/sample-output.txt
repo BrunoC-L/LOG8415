@@ -1,0 +1,151 @@
+root@DESKTOP-FJJ4HB5:/mnt/c/Users/Bruno/Desktop/LOG8415/project# sudo sysbench oltp_read_write --mysql-user=bruno --mysql-password=bruno --mysql-db=sakila --mysql-host=$standaloneIP --time=60 run
+sysbench 1.0.18 (using system LuaJIT 2.1.0-beta3)
+
+Running the test with following options:
+Number of threads: 1
+Initializing random number generator from current time
+
+
+Initializing worker threads...
+
+Threads started!
+
+SQL statistics:
+    queries performed:
+        read:                            1260
+        write:                           360
+        other:                           180
+        total:                           1800
+    transactions:                        90     (1.49 per sec.)
+    queries:                             1800   (29.87 per sec.)
+    ignored errors:                      0      (0.00 per sec.)
+    reconnects:                          0      (0.00 per sec.)
+
+General statistics:
+    total time:                          60.2532s
+    total number of events:              90
+
+Latency (ms):
+         min:                                  642.24
+         avg:                                  669.45
+         max:                                 1043.67
+         95th percentile:                      773.68
+         sum:                                60250.19
+
+Threads fairness:
+    events (avg/stddev):           90.0000/0.00
+    execution time (avg/stddev):   60.2502/0.00
+
+root@DESKTOP-FJJ4HB5:/mnt/c/Users/Bruno/Desktop/LOG8415/project# sudo sysbench oltp_read_write --mysql-user=bruno --mysql-password=bruno --mysql-db=sakila --mysql-host=$standaloneIP --time=60 --threads=4 run
+sysbench 1.0.18 (using system LuaJIT 2.1.0-beta3)
+
+Running the test with following options:
+Number of threads: 4
+Initializing random number generator from current time
+
+
+Initializing worker threads...
+
+Threads started!
+
+SQL statistics:
+    queries performed:
+        read:                            5096
+        write:                           1456
+        other:                           728
+        total:                           7280
+    transactions:                        364    (6.01 per sec.)
+    queries:                             7280   (120.22 per sec.)
+    ignored errors:                      0      (0.00 per sec.)
+    reconnects:                          0      (0.00 per sec.)
+
+General statistics:
+    total time:                          60.5562s
+    total number of events:              364
+
+Latency (ms):
+         min:                                  605.88
+         avg:                                  661.66
+         max:                                 1096.47
+         95th percentile:                      759.88
+         sum:                               240844.00
+
+Threads fairness:
+    events (avg/stddev):           91.0000/2.35
+    execution time (avg/stddev):   60.2110/0.21
+
+root@DESKTOP-FJJ4HB5:/mnt/c/Users/Bruno/Desktop/LOG8415/project# sudo sysbench oltp_read_write --mysql-user=bruno --mysql-password=bruno --mysql-db=sakila --mysql-host=$standaloneIP --time=60 --threads=16 run
+sysbench 1.0.18 (using system LuaJIT 2.1.0-beta3)
+
+Running the test with following options:
+Number of threads: 16
+Initializing random number generator from current time
+
+
+Initializing worker threads...
+
+Threads started!
+
+SQL statistics:
+    queries performed:
+        read:                            20118
+        write:                           5748
+        other:                           2874
+        total:                           28740
+    transactions:                        1437   (23.70 per sec.)
+    queries:                             28740  (474.00 per sec.)
+    ignored errors:                      0      (0.00 per sec.)
+    reconnects:                          0      (0.00 per sec.)
+
+General statistics:
+    total time:                          60.6323s
+    total number of events:              1437
+
+Latency (ms):
+         min:                                  603.73
+         avg:                                  671.63
+         max:                                 1319.88
+         95th percentile:                      802.05
+         sum:                               965136.13
+
+Threads fairness:
+    events (avg/stddev):           89.8125/2.60
+    execution time (avg/stddev):   60.3210/0.19
+
+root@DESKTOP-FJJ4HB5:/mnt/c/Users/Bruno/Desktop/LOG8415/project# sudo sysbench oltp_read_write --mysql-user=bruno --mysql-password=bruno --mysql-db=sakila --mysql-host=$standaloneIP --time=60 --threads=64 run
+sysbench 1.0.18 (using system LuaJIT 2.1.0-beta3)
+
+Running the test with following options:
+Number of threads: 64
+Initializing random number generator from current time
+
+
+Initializing worker threads...
+
+Threads started!
+
+SQL statistics:
+    queries performed:
+        read:                            66108
+        write:                           18850
+        other:                           9428
+        total:                           94386
+    transactions:                        4706   (77.20 per sec.)
+    queries:                             94386  (1548.28 per sec.)
+    ignored errors:                      16     (0.26 per sec.)
+    reconnects:                          0      (0.00 per sec.)
+
+General statistics:
+    total time:                          60.9606s
+    total number of events:              4706
+
+Latency (ms):
+         min:                                  633.77
+         avg:                                  822.67
+         max:                                 2229.64
+         95th percentile:                     1191.92
+         sum:                              3871495.95
+
+Threads fairness:
+    events (avg/stddev):           73.5312/2.51
+    execution time (avg/stddev):   60.4921/0.27

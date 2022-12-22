@@ -5,6 +5,14 @@ sudo apt update
 
 echo "mysql cluster master" >> /var/log/user-data.log
 
+wget https://dev.mysql.com/get/Downloads/MySQL-Cluster-8.0/mysql-cluster-community-management-server_8.0.31-1ubuntu20.04_amd64.deb
+sudo dpkg -i mysql-cluster-community-management-server_8.0.31-1ubuntu20.04_amd64.deb
+
+echo "config.ini" >> /var/log/user-data.log
+sudo mkdir /var/lib/mysql-cluster
+
+
+
 # sudo apt -y install libclass-methodmaker-perl
 # sudo apt -y install libncurses5
 
