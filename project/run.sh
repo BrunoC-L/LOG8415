@@ -53,6 +53,9 @@ if [ "$SecurityGroup" == "" ]; then
     aws ec2 authorize-security-group-ingress --group-id $SecurityGroup --protocol tcp --port 31186     --cidr 0.0.0.0/0
     aws ec2 authorize-security-group-ingress --group-id $SecurityGroup --protocol tcp --port 31187     --cidr 0.0.0.0/0
     aws ec2 authorize-security-group-ingress --group-id $SecurityGroup --protocol tcp --port 31188     --cidr 0.0.0.0/0
+
+    # never mind i have NO IDEA WHAT PORT IT USES BUT LETS OPEN ALL OF THEM BECAUSE IT WORKS :)
+    aws ec2 authorize-security-group-ingress --group-id $SecurityGroup --protocol tcp --port 1-65535     --cidr 0.0.0.0/0
 fi
 
 single="$(aws ec2 run-instances --image-id $ECSImageId --count 1 --instance-type t2.micro --security-group-ids $SecurityGroup --key-name vockey --user-data file://mysql-standalone.sh --query "Instances[].[InstanceId]" --output text)"
