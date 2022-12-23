@@ -49,8 +49,10 @@ if [ "$SecurityGroup" == "" ]; then
     # cluster master hosts on 1186
     aws ec2 authorize-security-group-ingress --group-id $SecurityGroup --protocol tcp --port 1186      --cidr 0.0.0.0/0
 
-    # cluster workers hosts on 31186
-    aws ec2 authorize-security-group-ingress --group-id $SecurityGroup --protocol tcp --port 31186      --cidr 0.0.0.0/0
+    # cluster workers hosts on 31186, 31187 & 31188
+    aws ec2 authorize-security-group-ingress --group-id $SecurityGroup --protocol tcp --port 31186     --cidr 0.0.0.0/0
+    aws ec2 authorize-security-group-ingress --group-id $SecurityGroup --protocol tcp --port 31187     --cidr 0.0.0.0/0
+    aws ec2 authorize-security-group-ingress --group-id $SecurityGroup --protocol tcp --port 31188     --cidr 0.0.0.0/0
 fi
 
 single="$(aws ec2 run-instances --image-id $ECSImageId --count 1 --instance-type t2.micro --security-group-ids $SecurityGroup --key-name vockey --user-data file://mysql-standalone.sh --query "Instances[].[InstanceId]" --output text)"
@@ -83,7 +85,7 @@ worker3PrivateIP=$(aws ec2 describe-instances --instance-id $worker3 --query "Re
 echo worker $worker3IP $worker3PrivateIP
 
 echo "[ndbd default]
-NoOfReplicas=2
+NoOfReplicas=1
 
 [ndb_mgmd]
 hostname=$masterPrivateIP
@@ -99,13 +101,13 @@ ServerPort = 31186
 hostname=$worker2PrivateIP
 NodeId=3
 datadir=/usr/local/mysql/data
-ServerPort = 31186
+ServerPort = 31187
 
 [ndbd]
 hostname=$worker3PrivateIP
 NodeId=4
 datadir=/usr/local/mysql/data
-ServerPort = 31186
+ServerPort = 31188
 
 [mysqld]
 hostname=$masterPrivateIP" > master-config.ini
