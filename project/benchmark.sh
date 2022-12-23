@@ -10,7 +10,7 @@ sudo sysbench oltp_read_write --mysql-user=bruno --mysql-password=bruno --mysql-
 sudo sysbench oltp_read_write --mysql-user=bruno --mysql-password=bruno --mysql-db=sakila --mysql-host=$singleIP cleanup
 
 
-masterIP=3.83.204.113
+masterIP=52.91.2.159
 sudo mysql --host=$masterIP -ubruno -pbruno -e "use sakila; select * from inventory limit 1;"
 
 sudo sysbench oltp_read_write --mysql-user=bruno --mysql-password=bruno --mysql-db=sakila --mysql-host=$masterIP prepare

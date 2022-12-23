@@ -33,6 +33,9 @@ mkdir install
 tar -xvf $version -C install/
 cd install
 sudo apt -y install libaio1 libmecab2
+curl https://raw.githubusercontent.com/BrunoC-L/LOG8415/main/project/master-my.cnf > my.cnf
+sudo mkdir /etc/mysql
+curl https://raw.githubusercontent.com/BrunoC-L/LOG8415/main/project/master-mysqld.cnf > mysqld.cnf
 echo "dependencies" >> /var/log/user-data.log
 sudo dpkg -i mysql-common_7.6.6-1ubuntu18.04_amd64.deb
 sudo dpkg -i mysql-cluster-community-client_7.6.6-1ubuntu18.04_amd64.deb

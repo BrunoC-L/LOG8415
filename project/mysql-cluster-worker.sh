@@ -33,3 +33,5 @@ sudo apt -y install libncurses5
 echo "ndbd" >> /var/log/user-data.log
 sudo ndbd
 
+echo "done" >> /var/log/user-data.log
+
