@@ -1,7 +1,6 @@
-cd install
 
 # this line requires a password, we pick "abcd" everytime for simplicity
-sudo dpkg -i mysql-cluster-community-server_7.6.6-1ubuntu18.04_amd64.deb
+cd /install && sudo dpkg -i mysql-cluster-community-server_7.6.6-1ubuntu18.04_amd64.deb
 
 # automatic
 
