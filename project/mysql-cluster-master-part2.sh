@@ -14,3 +14,16 @@ sudo mysql -u root -pabcd -e "SOURCE /tmp/sakila-db/sakila-schema.sql;"
 sudo mysql -u root -pabcd -e "SOURCE /tmp/sakila-db/sakila-data.sql;"
 sudo mysql -u root -pabcd -e "create user 'bruno'@'%' identified by 'bruno';"
 sudo mysql -u root -pabcd -e "GRANT ALL ON *.* TO 'bruno'@'%';"
+
+
+
+
+
+
+
+
+sudo apt install net-tools
+sudo netstat
+ps aux | grep mysql
+sudo mysql -ubruno -pbruno -e "use sakila; select * from inventory limit 1;"
+sudo mysql -ubruno -pbruno -e "show engine ndb status \g;"

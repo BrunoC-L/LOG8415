@@ -10,8 +10,9 @@ sudo sysbench oltp_read_write --mysql-user=bruno --mysql-password=bruno --mysql-
 sudo sysbench oltp_read_write --mysql-user=bruno --mysql-password=bruno --mysql-db=sakila --mysql-host=$singleIP cleanup
 
 
-masterIP=3.92.205.148
+masterIP=44.203.134.237
 sudo mysql --host=$masterIP -ubruno -pbruno -e "use sakila; select * from inventory limit 1;"
+sudo mysql --host=$masterIP -ubruno -pbruno -e "show engine ndb status \g;"
 
 sudo sysbench oltp_read_write --mysql-user=bruno --mysql-password=bruno --mysql-db=sakila --mysql-host=$masterIP prepare
 sudo sysbench oltp_read_write --mysql-user=bruno --mysql-password=bruno --mysql-db=sakila --mysql-host=$masterIP --time=10 run
