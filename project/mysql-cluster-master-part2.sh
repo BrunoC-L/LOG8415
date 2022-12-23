@@ -33,3 +33,4 @@ ps aux | grep mysql
 sudo mysql -ubruno -pbruno -e "use sakila; select * from inventory limit 1;"
 sudo mysql -ubruno -pbruno -e "show engine ndb status \g;"
 sudo ndb_mgm -e show
+cat /var/lib/mysql-cluster/ndb_1_cluster.log

@@ -83,7 +83,7 @@ worker3PrivateIP=$(aws ec2 describe-instances --instance-id $worker3 --query "Re
 echo worker $worker3IP $worker3PrivateIP
 
 echo "[ndbd default]
-NoOfReplicas=1
+NoOfReplicas=2
 
 [ndb_mgmd]
 hostname=$masterPrivateIP
