@@ -7,4 +7,4 @@ skip_ssl
 bind-address=0.0.0.0
 
 [mysql_cluster]
-ndb-connectstring=172.31.94.196
+ndb-connectstring=172.31.87.97
