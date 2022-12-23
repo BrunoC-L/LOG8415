@@ -1,4 +1,4 @@
-singleIP=44.202.228.30
+singleIP=52.23.204.143
 sudo mysql --host=$singleIP -ubruno -pbruno -e "use sakila; select * from inventory limit 1;"
 
 
@@ -12,7 +12,7 @@ sudo sysbench oltp_read_write --mysql-user=bruno --mysql-password=bruno --mysql-
 
 
 
-masterIP=3.83.55.0
+masterIP=54.197.191.35
 sudo mysql --host=$masterIP -ubruno -pbruno -e "use sakila; select * from inventory limit 1;"
 sudo mysql --host=$masterIP -ubruno -pbruno -e "show engine ndb status \g;"
 

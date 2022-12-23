@@ -41,3 +41,5 @@ sudo dpkg -i mysql-common_7.6.6-1ubuntu18.04_amd64.deb
 sudo dpkg -i mysql-cluster-community-client_7.6.6-1ubuntu18.04_amd64.deb
 sudo dpkg -i mysql-client_7.6.6-1ubuntu18.04_amd64.deb
 echo "done, waiting for interactive part 2" >> /var/log/user-data.log
+
+

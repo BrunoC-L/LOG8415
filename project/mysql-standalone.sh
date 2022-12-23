@@ -25,3 +25,5 @@ echo "requesting" >> /var/log/user-data.log
 sudo mysql -e "use sakila; select * from inventory limit 1;" >> /var/log/user-data.log
 
 echo "done" >> /var/log/user-data.log
+
+
