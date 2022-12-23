@@ -53,31 +53,31 @@ if [ "$SecurityGroup" == "" ]; then
     aws ec2 authorize-security-group-ingress --group-id $SecurityGroup --protocol tcp --port 31186      --cidr 0.0.0.0/0
 fi
 
-single="$(aws ec2 run-instances --image-id $ECSImageId --count 1 --instance-type t2.small --security-group-ids $SecurityGroup --key-name vockey --user-data file://mysql-standalone.sh --query "Instances[].[InstanceId]" --output text)"
-sleep 1
+single="$(aws ec2 run-instances --image-id $ECSImageId --count 1 --instance-type t2.micro --security-group-ids $SecurityGroup --key-name vockey --user-data file://mysql-standalone.sh --query "Instances[].[InstanceId]" --output text)"
+sleep 2
 singleIP=$(aws ec2 describe-instances --instance-id $single --query "Reservations[].Instances[].PublicIpAddress[]" --output text)
 echo single $singleIP
 
-master="$(aws ec2 run-instances --image-id $ECSImageId --count 1 --subnet-id=$Subnet --instance-type t2.small --security-group-ids $SecurityGroup --key-name vockey --user-data file://mysql-cluster-master.sh --query "Instances[].[InstanceId]" --output text)"
-sleep 1
+master="$(aws ec2 run-instances --image-id $ECSImageId --count 1 --subnet-id=$Subnet --instance-type t2.micro --security-group-ids $SecurityGroup --key-name vockey --user-data file://mysql-cluster-master.sh --query "Instances[].[InstanceId]" --output text)"
+sleep 2
 masterIP=$(aws ec2 describe-instances --instance-id $master --query "Reservations[].Instances[].PublicIpAddress[]" --output text)
 masterPrivateIP=$(aws ec2 describe-instances --instance-id $master --query "Reservations[].Instances[].PrivateIpAddress[]" --output text)
 echo master $masterIP $masterPrivateIP
 
-worker1="$(aws ec2 run-instances --image-id $ECSImageId --count 1 --subnet-id=$Subnet --instance-type t2.small --security-group-ids $SecurityGroup --key-name vockey --user-data file://mysql-cluster-worker.sh --query "Instances[].[InstanceId]" --output text)"
-sleep 1
+worker1="$(aws ec2 run-instances --image-id $ECSImageId --count 1 --subnet-id=$Subnet --instance-type t2.micro --security-group-ids $SecurityGroup --key-name vockey --user-data file://mysql-cluster-worker.sh --query "Instances[].[InstanceId]" --output text)"
+sleep 2
 worker1IP=$(aws ec2 describe-instances --instance-id $worker1 --query "Reservations[].Instances[].PublicIpAddress[]" --output text)
 worker1PrivateIP=$(aws ec2 describe-instances --instance-id $worker1 --query "Reservations[].Instances[].PrivateIpAddress[]" --output text)
 echo worker $worker1IP $worker1PrivateIP
 
-worker2="$(aws ec2 run-instances --image-id $ECSImageId --count 1 --subnet-id=$Subnet --instance-type t2.small --security-group-ids $SecurityGroup --key-name vockey --user-data file://mysql-cluster-worker.sh --query "Instances[].[InstanceId]" --output text)"
-sleep 1
+worker2="$(aws ec2 run-instances --image-id $ECSImageId --count 1 --subnet-id=$Subnet --instance-type t2.micro --security-group-ids $SecurityGroup --key-name vockey --user-data file://mysql-cluster-worker.sh --query "Instances[].[InstanceId]" --output text)"
+sleep 2
 worker2IP=$(aws ec2 describe-instances --instance-id $worker2 --query "Reservations[].Instances[].PublicIpAddress[]" --output text)
 worker2PrivateIP=$(aws ec2 describe-instances --instance-id $worker2 --query "Reservations[].Instances[].PrivateIpAddress[]" --output text)
 echo worker $worker2IP $worker2PrivateIP
 
-worker3="$(aws ec2 run-instances --image-id $ECSImageId --count 1 --subnet-id=$Subnet --instance-type t2.small --security-group-ids $SecurityGroup --key-name vockey --user-data file://mysql-cluster-worker.sh --query "Instances[].[InstanceId]" --output text)"
-sleep 1
+worker3="$(aws ec2 run-instances --image-id $ECSImageId --count 1 --subnet-id=$Subnet --instance-type t2.micro --security-group-ids $SecurityGroup --key-name vockey --user-data file://mysql-cluster-worker.sh --query "Instances[].[InstanceId]" --output text)"
+sleep 2
 worker3IP=$(aws ec2 describe-instances --instance-id $worker3 --query "Reservations[].Instances[].PublicIpAddress[]" --output text)
 worker3PrivateIP=$(aws ec2 describe-instances --instance-id $worker3 --query "Reservations[].Instances[].PrivateIpAddress[]" --output text)
 echo worker $worker3IP $worker3PrivateIP

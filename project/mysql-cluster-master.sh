@@ -24,7 +24,7 @@ sudo apt -y install libclass-methodmaker-perl
 sudo apt -y install libncurses5
 
 echo "ndb_mgmd" >> /var/log/user-data.log
-sudo ndb_mgmd -f /var/lib/mysql-cluster/config.ini --ndb-nodeid=1 >> /var/log/user-data.log
+sudo ndb_mgmd -f /var/lib/mysql-cluster/config.ini --ndb-nodeid=1 --reload >> /var/log/user-data.log
 
 echo "custom cluster" >> /var/log/user-data.log
 version=mysql-cluster_7.6.6-1ubuntu18.04_amd64.deb-bundle.tar
