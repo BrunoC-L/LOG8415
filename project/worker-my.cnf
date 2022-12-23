@@ -1,2 +1,2 @@
 [mysql_cluster]
-ndb-connectstring=172.31.88.150
+ndb-connectstring=172.31.80.39

@@ -1,15 +1,14 @@
 sudo dpkg -i mysql-cluster-community-server_7.6.6-1ubuntu18.04_amd64.deb
+
 sudo dpkg -i mysql-server_7.6.6-1ubuntu18.04_amd64.deb
 
-echo "my.cnf mysqld.cnf" >> /var/log/user-data.log
 sudo cp my.cnf /etc/mysql/my.cnf
 sudo cp mysqld.cnf /etc/mysql/mysql.conf.d/mysqld.cnf
 
-echo "restart mysql" >> /var/log/user-data.log
 sudo systemctl restart mysql
 
-echo "download sample db" >> /var/log/user-data.log
-sudo wget https://downloads.mysql.com/docs/sakila-db.tar.gz && sudo tar -xf sakila-db.tar.gz -C /tmp/
+sudo wget https://downloads.mysql.com/docs/sakila-db.tar.gz
+sudo tar -xf sakila-db.tar.gz -C /tmp/
 
 sudo mysql -u root -pabcd -e "SOURCE /tmp/sakila-db/sakila-schema.sql;"
 sudo mysql -u root -pabcd -e "SOURCE /tmp/sakila-db/sakila-data.sql;"
